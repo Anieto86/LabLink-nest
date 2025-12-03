@@ -1,6 +1,7 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import { DATABASE_URL } from "../../config/env";
+import * as schema from "./schema";
 
 /**
  * PostgreSQL connection pool configuration
@@ -13,4 +14,4 @@ const pool = new Pool({ connectionString: DATABASE_URL });
  * Provides type-safe database operations with PostgreSQL
  * All repository classes should use this client for database access
  */
-export const db = drizzle(pool);
+export const db = drizzle(pool, { schema });
