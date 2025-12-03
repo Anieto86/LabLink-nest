@@ -1,104 +1,92 @@
 # LabLink-nest
 
-Proyecto API modular construido con NestJS, TypeScript y Drizzle ORM. Incluye herramientas para flujos de desarrollo, testing y estudio integrados.
+Modular API project built with NestJS, TypeScript, and Drizzle ORM. Includes tools for development, testing, and integrated study workflows.
 
-## 📁 Estructura de Carpetas
+## 📁 Directory Structure
 
 ```
 src/
-├── main.ts                  # Entrypoint NestJS
-├── app.module.ts            # Módulo principal
+├── main.ts                  # NestJS entrypoint
+├── app.module.ts            # Main module
 ├── modules/
-│   └── example/             # Módulo de ejemplo
+│   └── example/             # Example module
 │       ├── example.controller.ts
 │       ├── example.service.ts
 │       ├── example.repo.ts
 │       └── example.controller.spec.ts
 ├── infra/
 │   └── db/
-│       ├── schema.ts        # Definición de schema Drizzle
-│       └── client.ts        # Configuración de conexión
+│       ├── schema.ts        # Drizzle schema definition
+│       └── client.ts        # Database connection config
 ├── config/
-│   └── env.ts               # Validación de entorno (Zod)
+│   └── env.ts               # Environment validation (Zod)
 ```
 
-## 🚀 Comandos Rápidos
+## 🚀 Quick Commands
 
 ```bash
-pnpm start         # Inicia el servidor NestJS
+pnpm start         # Start NestJS server
 pnpm start:dev     # Hot reload
-pnpm check         # Formato, lint, typecheck
-pnpm db:gen        # Genera migraciones
-pnpm db:migrate    # Aplica migraciones
-pnpm db:studio     # GUI Drizzle Studio
-pnpm test          # Ejecuta tests con Jest
+pnpm check         # Format, lint, typecheck
+pnpm db:gen        # Generate migrations
+pnpm db:migrate    # Apply migrations
+pnpm db:studio     # Drizzle Studio GUI
+pnpm test          # Run tests with Jest
 ```
 
-## 🔧 Herramientas y Integraciones
+## 🔧 Tools & Integrations
 
-- **Biome**: Formato, lint, orden de imports
-- **Jest**: Testing integrado con NestJS
-- **Drizzle ORM**: Acceso y migración de base de datos
-- **Obsidian Integration**: Sincronización y templates para estudio
-- **Warp Workflows**: Alias y comandos para terminal
+- **Biome**: Formatting, linting, import sorting
+- **Jest**: Integrated testing with NestJS
+- **Drizzle ORM**: Database access and migrations
+- **Obsidian Integration**: Sync and templates for study
+- **Warp Workflows**: Terminal aliases and commands
 
-## 📚 Flujos de Estudio y Sincronización
+## 📚 Study & Sync Workflows
 
-Puedes usar las herramientas externas para potenciar el aprendizaje y análisis del proyecto:
+You can use external tools to enhance learning and project analysis:
 
-- Sincroniza el proyecto con Obsidian usando `npm run obsidian:sync` o `ll-sync`
-- Usa templates en Obsidian para análisis de código, trazas de flujo, sesiones de estudio y mapeo de arquitectura
-- Ejecuta comandos Warp para automatizar tareas de estudio y sincronización
+- Sync the project with Obsidian using `npm run obsidian:sync` or `ll-sync`
+- Use Obsidian templates for code analysis, flow tracing, study sessions, and architecture mapping
+- Run Warp commands to automate study and sync tasks
 
-## 📋 Templates Disponibles
+## 📋 Available Templates
 
-- **Code Analysis**: Análisis profundo de archivos
-- **Code Flow Trace**: Seguimiento de flujos
-- **Learning Session**: Sesiones estructuradas
-- **Learning Game**: Progreso gamificado
-- **Project Map**: Mapeo de arquitectura
-- **Reverse Engineering**: Aprendizaje por descubrimiento
+- **Code Analysis**: Deep dive into files
+- **Code Flow Trace**: Track request/response flows
+- **Learning Session**: Structured study sessions
+- **Learning Game**: Gamified progress
+- **Project Map**: Architecture mapping
+- **Reverse Engineering**: Discovery-based learning
 
-## 🎯 Beneficios
+## 🎯 Benefits
 
-- Sincronización automática entre desarrollo y entorno de estudio
-- Aprendizaje estructurado con templates
-- Notas versionadas junto al código
-- Acceso rápido al contexto del proyecto
-- Visualización de conexiones en Obsidian
+- Automated sync between development and study environments
+- Structured learning with templates
+- Version-controlled notes alongside code
+- Quick access to project context
+- Visual connections in Obsidian
 
-## Configuración
+## Configuration
 
-- Scripts y rutas en `scripts/auto-sync-to-obsidian.sh`, `tools/warp-workflows/warp-commands.sh`, y `package.json`
+- Scripts and paths in `scripts/auto-sync-to-obsidian.sh`, `tools/warp-workflows/warp-commands.sh`, and `package.json`
 
-## ⚡️ Configuración de Drizzle ORM
+## ⚡️ Drizzle ORM Configuration
 
-La configuración de Drizzle ORM se encuentra en `drizzle.config.ts` y permite adaptar la conexión a PostgreSQL según el entorno:
+Drizzle ORM configuration is in `drizzle.config.ts` and adapts the PostgreSQL connection for each environment:
 
-- Usa variables de entorno (`DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`) para construir la URL si no se provee `DATABASE_URL`.
-- Si `DB_HOST` es `db`, se resuelve a `127.0.0.1` para facilitar el desarrollo local fuera de Docker.
-- Muestra advertencia si no se encuentra `DATABASE_URL` y utiliza la URL construida.
-- El schema de la base de datos está en `src/infra/db/schema.ts`.
-- Las migraciones se guardan en `drizzle/migrations`.
+- Uses environment variables (`DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`) to build the URL if `DATABASE_URL` is not provided.
+- If `DB_HOST` is `db`, resolves to `127.0.0.1` for easier local development outside Docker.
+- Warns if `DATABASE_URL` is missing and uses the constructed URL.
+- Database schema is in `src/infra/db/schema.ts`.
+- Migrations are stored in `drizzle/migrations`.
 
-### Ejemplo de variables de entorno
-
-```env
-DATABASE_URL=postgresql://usuario:contraseña@localhost:5432/mi_db
-# O bien:
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_NAME=biotrack_db
-```
-
-### Comandos útiles
+### Useful Commands
 
 ```bash
-pnpm db:gen        # Genera migraciones desde cambios en el schema
-pnpm db:migrate    # Aplica migraciones a la base de datos
-pnpm db:studio     # Abre Drizzle Studio GUI
+pnpm db:gen        # Generate migrations from schema changes
+pnpm db:migrate    # Apply migrations to the database
+pnpm db:studio     # Open Drizzle Studio GUI
 ```
 
-Adapta las variables según tu entorno (local, Docker, producción) para asegurar la conexión correcta.
+Adapt variables for your environment (local, Docker, production) to ensure correct connection.
