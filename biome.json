@@ -7,9 +7,9 @@
 			"recommended": true,
 			"correctness": {
 				"noUnusedImports": "error",
-            "noUnusedVariables": "error",
-            "noConstantCondition": "error",
-            "useExhaustiveDependencies": "warn"
+				"noUnusedVariables": "error",
+				"noConstantCondition": "error",
+				"useExhaustiveDependencies": "warn"
 			},
 			"style": {
 				"useImportType": "error",
@@ -19,10 +19,10 @@
 				"noNamespace": "error"
 			},
 			"suspicious": {
-						"noExplicitAny": "error",
-            "noArrayIndexKey": "error",
-            "noDuplicateJsxProps": "error",
-            "noDebugger": "warn"
+				"noExplicitAny": "error",
+				"noArrayIndexKey": "error",
+				"noDuplicateJsxProps": "error",
+				"noDebugger": "warn"
 			}
 		}
 	},
@@ -38,6 +38,9 @@
 			"quoteStyle": "double",
 			"trailingCommas": "es5",
 			"semicolons": "always"
+		},
+		"parser": {
+			"unsafeParameterDecoratorsEnabled": true
 		}
 	},
 	"json": {

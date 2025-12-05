@@ -1,5 +1,5 @@
 export class ExampleRepo {
-  getData(): string {
-    return 'Repo data!';
-  }
+	getData(): string {
+		return "Repo data!";
+	}
 }

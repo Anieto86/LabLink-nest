@@ -1,7 +1,6 @@
 import { bigserial, boolean, pgTable, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core";
 import { userRole } from "./enums";
 
-
 /**
  * Users table - Manages user accounts and authentication
  * Stores user information, roles, and account status
