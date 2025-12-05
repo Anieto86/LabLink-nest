@@ -13,6 +13,6 @@ export const UsersRepo = {
 	},
 	findByEmail: async (email: string) => {
 		const [row] = await db.select().from(users).where(eq(users.email, email)).limit(1);
-		return row ?? null;
+		return row ??  null;
 	},
 };

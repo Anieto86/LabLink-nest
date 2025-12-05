@@ -120,6 +120,10 @@ Thumbs.db
 # Drizzle Kit
 .drizzle/
 
+# Drizzle migrations
+/drizzle/migrations/
+/drizzle/meta/
+
 # Testing
 test-results/
 playwright-report/
