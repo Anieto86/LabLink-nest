@@ -2,8 +2,10 @@ import {
 	BadRequestException,
 	Body,
 	Controller,
+	Delete,
 	Get,
 	Inject,
+	Param,
 	ParseIntPipe,
 	Post,
 	Query,
@@ -39,5 +41,11 @@ export class UserController {
 		// Llama al servicio para crear el usuario
 		const user = await this.userService.createUser(parseResult.data);
 		return { message: "User created successfully", user };
+	}
+
+	@Delete(":id")
+	async deleteUser(@Param("id", ParseIntPipe) id: number) {
+		await this.userService.deleteUser(id);
+		return { message: "User deleted successfully" };
 	}
 }
