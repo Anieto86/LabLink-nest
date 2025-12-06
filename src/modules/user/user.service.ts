@@ -3,6 +3,7 @@
  * Provides simple methods to retrieve user info by ID or email.
  */
 import { Injectable } from "@nestjs/common";
+import type { UserCreate } from "./dtos/users.dtos";
 
 @Injectable()
 export class UserService {
@@ -16,5 +17,10 @@ export class UserService {
 	async getUserByEmail(email: string) {
 		// Placeholder for user retrieval by email logic
 		return { id: 1, name: "John Doe", email: email };
+	}
+
+	async createUser(userData: UserCreate) {
+		// Placeholder for user creation logic
+		return { id: 2, ...userData };
 	}
 }

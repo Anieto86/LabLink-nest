@@ -1,90 +1,116 @@
-# LabLink-nest – AI Coding Agent Instructions
+# LabLink (BioTrack) - AI Coding Agent Instructions
 
 ## Architecture Overview
 
-LabLink-nest is a modular Node.js API built with TypeScript, NestJS , and Drizzle ORM. It follows a strict layered architecture designed for maintainability, scalability y integración sencilla de nuevas funcionalidades. Los patrones y convenciones están adaptados a las mejores prácticas de NestJS, con módulos, controladores, servicios y repositorios claramente separados.
+This is a **modular Node.js API** with TypeScript, Express, and Drizzle ORM following a strict **layered architecture**:
 
-- **Presentation Layer**: `src/modules/*/controller.ts` – HTTP routes and request handling via NestJS controllers
-- **Business Logic Layer**: `src/modules/*/service.ts` – Core business logic and validation (NestJS providers)
-- **Data Access Layer**: `src/modules/*/repo.ts` – Database operations with Drizzle ORM
-- **Infrastructure Layer**: `src/infra/` – External services, database, HTTP clients
+- **Presentation Layer**: `src/modules/*/router.ts` - HTTP routes and request handling
+- **Business Logic Layer**: `src/modules/*/service.ts` - Core business logic and validation
+- **Data Access Layer**: `src/modules/*/repo.ts` - Database operations with Drizzle ORM
+- **Infrastructure Layer**: `src/infra/` - External services, database, HTTP clients
 
 ## Key Development Patterns
 
 ### Module Structure
 
-Cada feature sigue este patrón exacto en `src/modules/[feature]/`:
+Each feature follows this **exact pattern** in `src/modules/[feature]/`:
 
 ```
 feature/
-├── feature.controller.ts    # NestJS controller, request validation, route decorators
-├── feature.service.ts       # Business logic, orchestration, validation (NestJS provider)
-└── feature.repo.ts          # Database queries using Drizzle ORM
+├── feature.router.ts    # Express routes, middleware, request validation
+├── feature.service.ts   # Business logic, orchestration, validation
+└── feature.repo.ts      # Database queries using Drizzle ORM
 ```
 
 ### Database with Drizzle ORM
 
-- **Schema**: Define tablas en `src/infra/db/schema.ts` usando Drizzle
-- **Client**: Conexión y config en `src/infra/db/client.ts`
-- **Migrations**: `pnpm db:gen` para generar, `pnpm db:migrate` para aplicar
-- **Type Safety**: Todas las queries son type-safe con TypeScript
+- **Schema**: Define tables in `src/infra/db/schema.ts` using Drizzle's schema API
+- **Client**: Database connection and config in `src/infra/db/client.ts`
+- **Migrations**: Use `pnpm db:gen` to generate, `pnpm db:migrate` to apply
+- **Type Safety**: All queries are fully type-safe with TypeScript inference
 
 ### Configuration & Environment
 
-- **Variables de entorno**: Definidas/validadas en `src/config/env.ts` (Zod)
-- **Logger**: Pino logger en `src/config/logger.ts`
-- **Database URL**: Cadena de conexión PostgreSQL en `.env`
+- **Environment Variables**: Define and validate in `src/config/env.ts` using Zod schemas
+- **Logger**: Configure Pino logger in `src/config/logger.ts` for structured logging
+- **Database URL**: PostgreSQL connection string in `.env` file
 
 ### Error Handling & HTTP
 
-- **Custom Errors**: `src/common/http/errors.ts` (clases base)
-- **Response Handlers**: `src/common/http/handlers.ts`
-- **HTTP Client**: Cliente basado en Undici en `src/infra/http/client.ts`
+- **Custom Errors**: Define in `src/common/http/errors.ts` extending base Error classes
+- **Response Handlers**: Standardized responses in `src/common/http/handlers.ts`
+- **HTTP Client**: Use Undici-based client in `src/infra/http/client.ts`
 
 ## Essential Commands
 
 ```bash
-# Desarrollo
-pnpm start         # Inicia el servidor NestJS
-pnpm start:dev     # Hot reload
-pnpm check         # Formato, lint, typecheck
+# Development workflow
+pnpm dev                 # Start dev server with hot reload (tsx watch)
+pnpm check              # Run format + lint + typecheck (always before committing)
 
-# Base de datos
-pnpm db:gen        # Genera migraciones
-pnpm db:migrate    # Aplica migraciones
-pnpm db:studio     # GUI Drizzle Studio
+# Database workflow
+pnpm db:gen             # Generate migrations from schema changes
+pnpm db:migrate         # Apply migrations to database
+pnpm db:studio          # Open Drizzle Studio GUI
 
 # Testing
-pnpm test          # Ejecuta tests unitarios (Vitest)
-pnpm test:watch    # Modo TDD
+pnpm test               # Run Vitest unit tests
+pnpm test:watch         # Watch mode for TDD
 ```
 
 ## Project-Specific Conventions
 
-- **Biome**: Formato, lint, orden de imports (no ESLint/Prettier)
-- **TypeScript estricto**: `noEmit` checks con `pnpm typecheck`
-- **pnpm v10.11.0+** requerido
-- **Seguridad**: Helmet (headers HTTP), CORS, Zod para validación
-- **Dependencia de módulos**: Controller → Service → Repository (no saltar capas)
-- **Inyección de dependencias**: Providers y repositorios vía DI de NestJS
-- **No acceso directo a DB**: Siempre usar service/repo
+### Code Quality Stack
+
+- **Biome** (not ESLint/Prettier): Single tool for formatting, linting, and import sorting
+- **Type Safety**: Strict TypeScript with `noEmit` checks via `pnpm typecheck`
+- **Package Manager**: pnpm v10.11.0+ required (specified in package.json)
+
+### Security & Middleware
+
+- **Helmet**: Required for HTTP security headers
+- **CORS**: Configurable cross-origin resource sharing
+- **Validation**: Use Zod schemas for request validation, integrated with Drizzle via drizzle-zod
+
+### Module Dependencies
+
+- **Router** → **Service** → **Repository** (never skip layers)
+- **Dependency Injection**: Inject services into routers, repositories into services
+- **No Direct DB Access**: Routes must go through service layer, services through repository layer
 
 ## Implementation Guidelines
 
-- Nuevos features: Crea módulo en `src/modules/[feature]/`, implementa repo → service → controller, registra el módulo en la app principal
-- Cambios de schema: Edita `src/infra/db/schema.ts`, ejecuta `pnpm db:gen`, revisa SQL, aplica con `pnpm db:migrate`
-- Testing: Unit tests para servicios/repos, E2E con Supertest en `src/test/e2e/`, mock/test DB
+### When Adding New Features
+
+1. Create module directory in `src/modules/[feature]/`
+2. Implement repository first (data layer)
+3. Build service layer (business logic)
+4. Add router with proper middleware
+5. Register routes in main app configuration
+
+### Database Schema Changes
+
+1. Modify `src/infra/db/schema.ts`
+2. Run `pnpm db:gen` to generate migration
+3. Review generated SQL in `drizzle/migrations/`
+4. Apply with `pnpm db:migrate`
+
+### Testing Strategy
+
+- **Unit Tests**: Test services and repositories independently
+- **E2E Tests**: Use Supertest in `src/test/e2e/` for API endpoint testing
+- **Database Tests**: Mock or use test database instances
 
 ## Key Files Reference
 
-- `src/main.ts` – Entrypoint NestJS
-- `src/infra/db/schema.ts` – Definición de schema Drizzle
-- `src/config/env.ts` – Validación de entorno
-- `package.json` – Tipo ES module
-- `drizzle.config.ts` – Configuración de migraciones
+- `src/server.ts` - Server entry point and Express app setup
+- `src/infra/db/schema.ts` - Drizzle database schema definitions
+- `src/config/env.ts` - Environment variable validation with Zod
+- `package.json` - Note the `"type": "module"` for ES modules
+- `drizzle.config.ts` - Drizzle ORM configuration for migrations
 
 ## OpenAPI Integration
 
-- Documentación API en `src/openapi/openapi.json`
-- Mantén el spec sincronizado con los controllers
-- Considera generación automática desde los controllers
+- API documentation in `src/openapi/openapi.json`
+- Keep OpenAPI spec synchronized with actual route implementations
+- Consider using automated OpenAPI generation from route definitions
