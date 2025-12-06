@@ -27,8 +27,18 @@ export const userLoginDto = z.object({
 	password: z.string(), // length validation already handled in create; free length here
 });
 
+export const userUpdateDto = userBaseDto.partial().extend({
+	isActive: z.boolean().optional(),
+	password: z
+		.string()
+		.min(8, "Password must be at least 8 characters")
+		.max(100, "Password is too long")
+		.optional(),
+});
+
 // types
 export type UserBase = z.infer<typeof userBaseDto>;
 export type UserCreate = z.infer<typeof userCreateDto>;
 export type UserRead = z.infer<typeof userReadDto>;
+export type UserUpdate = z.infer<typeof userUpdateDto>;
 export type UserLogin = z.infer<typeof userLoginDto>;

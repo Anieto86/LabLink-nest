@@ -7,6 +7,7 @@ import { db } from "../../infra/db/client";
 import { users } from "../../infra/db/schema";
 
 type NewUser = InferInsertModel<typeof users>;
+type UpdatableUser = Omit<InferInsertModel<typeof users>, "id" | "createdAt" | "updatedAt">;
 
 export const UsersRepo = {
 	findById: async (id: number) => {
@@ -25,6 +26,11 @@ export const UsersRepo = {
 
 	deleteById: async (id: number) => {
 		const [row] = await db.delete(users).where(eq(users.id, id)).returning();
+		return row ?? null;
+	},
+
+	updateById: async (id: number, updateData: Partial<UpdatableUser>) => {
+		const [row] = await db.update(users).set(updateData).where(eq(users.id, id)).returning();
 		return row ?? null;
 	},
 };

@@ -8,9 +8,10 @@ import {
 	Param,
 	ParseIntPipe,
 	Post,
+	Put,
 	Query,
 } from "@nestjs/common";
-import { userCreateDto } from "./dtos/users.dtos";
+import { userCreateDto, userUpdateDto } from "./dtos/users.dtos";
 import { UserService } from "./user.service";
 
 @Controller("user")
@@ -47,5 +48,15 @@ export class UserController {
 	async deleteUser(@Param("id", ParseIntPipe) id: number) {
 		await this.userService.deleteUser(id);
 		return { message: "User deleted successfully" };
+	}
+
+	@Put(":id")
+	async updateUser(@Param("id", ParseIntPipe) id: number, @Body() body: unknown) {
+		const parseResult = userUpdateDto.safeParse(body);
+		if (!parseResult.success) {
+			throw new BadRequestException(parseResult.error.flatten());
+		}
+		const user = await this.userService.updateUser(id, parseResult.data);
+		return { message: "User updated successfully", user };
 	}
 }
