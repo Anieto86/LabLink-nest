@@ -1,9 +1,10 @@
 import { z } from "zod";
+import { userRole } from "../../../infra/db/schema/enums";
 
 /** = UserBase */
 export const userBaseDto = z.object({
 	name: z.string().min(2, "Name is required").max(50, "Name is too long"),
-	role: z.enum(["admin", "scientist", "student", "tech", "viewer"]).default("viewer"),
+	role: z.enum(userRole.enumValues),
 	email: z.string().email("Invalid email address"),
 });
 

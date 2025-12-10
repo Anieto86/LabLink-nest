@@ -1,34 +1,80 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { createEquipmentDto, updateEquipmentDto } from './dto/equipment.dto';
 import { EquipmentService } from './equipment.service';
-import { CreateEquipmentDto } from './dto/create-equipment.dto';
-import { UpdateEquipmentDto } from './dto/update-equipment.dto';
-
+@ApiTags('equipment')
 @Controller('equipment')
 export class EquipmentController {
   constructor(private readonly equipmentService: EquipmentService) {}
 
-  @Post()
-  create(@Body() createEquipmentDto: CreateEquipmentDto) {
-    return this.equipmentService.create(createEquipmentDto);
-  }
 
+  /**
+   * GET /equipment
+   * List all equipment
+   */
+  @ApiOperation({ summary: 'List all equipment' })
+  @ApiResponse({ status: 200, description: 'List of equipment returned.' })
   @Get()
-  findAll() {
-    return this.equipmentService.findAll();
+  async getAll() {
+    return await this.equipmentService.getAllEquipment();
   }
 
+
+  /**
+   * GET /equipment/:id
+   * Get equipment by id
+   */
+  @ApiOperation({ summary: 'Get equipment by id' })
+  @ApiParam({ name: 'id', type: Number })
+  @ApiResponse({ status: 200, description: 'Equipment found.' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.equipmentService.findOne(+id);
+  async getById(@Param('id', ParseIntPipe) id: number) {
+    return await this.equipmentService.getEquipmentById(id);
   }
 
+
+  /**
+   * POST /equipment
+   * Create new equipment
+   */
+  @ApiOperation({ summary: 'Create new equipment' })
+  @ApiBody({ type: Object })
+  @ApiResponse({ status: 201, description: 'Equipment created.' })
+  @Post()
+  async create(@Body() body: unknown) {
+    const parseResult = createEquipmentDto.safeParse(body);
+    if (!parseResult.success) {
+      throw new BadRequestException(parseResult.error.flatten());
+    }
+    return await this.equipmentService.createEquipment(parseResult.data);
+  }
+
+
+  /**
+   * PATCH /equipment/:id
+   * Update existing equipment
+   */
+  @ApiOperation({ summary: 'Update existing equipment' })
+  @ApiParam({ name: 'id', type: Number })
+  @ApiBody({ type: Object })
+  @ApiResponse({ status: 200, description: 'Equipment updated.' })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEquipmentDto: UpdateEquipmentDto) {
-    return this.equipmentService.update(+id, updateEquipmentDto);
+  async update(@Param('id', ParseIntPipe) id: number, @Body() body: unknown) {
+    const parseResult = updateEquipmentDto.safeParse(body);
+    if (!parseResult.success) {
+      throw new BadRequestException(parseResult.error.flatten());
+    }
+    return await this.equipmentService.updateEquipment(id, parseResult.data);
   }
 
+  /**
+   * Delete equipment by id
+   */
+  @ApiOperation({ summary: 'Delete equipment by id' })
+  @ApiParam({ name: 'id', type: Number })
+  @ApiResponse({ status: 200, description: 'Equipment deleted.' })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.equipmentService.remove(+id);
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return await this.equipmentService.deleteEquipment(id);
   }
 }

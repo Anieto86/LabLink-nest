@@ -1,8 +1,8 @@
 import type { InferSelectModel } from "drizzle-orm";
-import type { users } from "../../infra/db/schema/users";
-import type { UserRead } from "./dto/users.dtos";
+import type { user } from "../../infra/db/schema/users";
+import type { UserRead } from "./dto/users.dto";
 
-type UserRow = InferSelectModel<typeof users>;
+type UserRow = InferSelectModel<typeof user>;
 
 export function toUserRead(u: UserRow): UserRead {
 	if (u.role == null) {

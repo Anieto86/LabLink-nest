@@ -3,6 +3,7 @@ import { db } from "src/infra/db/client";
 import { equipment } from "src/infra/db/schema";
 
 type NewEquipment = InferInsertModel<typeof equipment>;
+type UpdatableEquipment = Omit<InferInsertModel<typeof equipment>, "id" | "createdAt" | "updatedAt">;
 
 export const EquipmentRepo = {
   findById: async (id: number) => {
@@ -19,7 +20,7 @@ export const EquipmentRepo = {
     return row;
   },
 
-  updateById: async (id: number, updateData: Partial<NewEquipment>) => {
+  updateById: async (id: number, updateData: Partial<UpdatableEquipment>) => {
     const [row] = await db.update(equipment).set(updateData).where(eq(equipment.id, id)).returning();
     return row ?? null;
   },

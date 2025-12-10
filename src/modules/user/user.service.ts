@@ -4,14 +4,14 @@
  */
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { hashPassword } from "../../infra/security/hash";
-import type { UserCreate, UserUpdate } from "./dto/users.dtos";
+import type { UserCreate, UserUpdate } from "./dto/users.dto";
 import { toUserRead } from "./user.mapper";
-import { UsersRepo } from "./user.repo";
+import { UserRepo } from "./user.repo";
 
 @Injectable()
 export class UserService {
 	async getUserInfo(userId: number) {
-		const user = await UsersRepo.findById(userId);
+		const user = await UserRepo.findById(userId);
 		if (!user) {
 			throw new NotFoundException("User not found");
 		}
@@ -19,7 +19,7 @@ export class UserService {
 	}
 
 	async getUserByEmail(email: string) {
-		const user = await UsersRepo.findByEmail(email);
+		const user = await UserRepo.findByEmail(email);
 		if (!user) throw new NotFoundException("User not found");
 		return toUserRead(user);
 	}
@@ -28,7 +28,7 @@ export class UserService {
 		const passwordHash = await hashPassword(password);
 
 		try {
-			const user = await UsersRepo.create({ ...rest, passwordHash });
+			const user = await UserRepo.create({ ...rest, passwordHash });
 			return toUserRead(user);
 		} catch (error: unknown) {
 			if (isUniqueViolationError(error)) {
@@ -39,13 +39,13 @@ export class UserService {
 	}
 
 	async deleteUser(userId: number) {
-		const userDeleted = await UsersRepo.deleteById(userId);
+		const userDeleted = await UserRepo.deleteById(userId);
 		if (!userDeleted) throw new NotFoundException("User not found");
 		return { id: userDeleted.id };
 	}
 
 	async updateUser(id: number, updateData: UserUpdate) {
-		const existing = await UsersRepo.findById(id);
+		const existing = await UserRepo.findById(id);
 		if (!existing) {
 			throw new NotFoundException("User not found");
 		}
@@ -71,7 +71,7 @@ export class UserService {
 		}
 
 		try {
-			const updated = await UsersRepo.updateById(id, updatePayload);
+			const updated = await UserRepo.updateById(id, updatePayload);
 			if (!updated) throw new NotFoundException("User not found");
 			return toUserRead(updated);
 		} catch (err) {

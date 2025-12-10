@@ -13,7 +13,7 @@ export const equipment = pgTable(
 		name: text("name").notNull(),
 		type: text("type"),
 		laboratoryId: bigint("laboratory_id", { mode: "number" }).references(() => laboratories.id),
-		status: equipmentStatus("status").default("available"),
+		status: equipmentStatus("status").default("available").notNull(),
 		createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 		updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 	},
