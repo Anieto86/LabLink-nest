@@ -14,4 +14,7 @@
 
 // Re-export all schemas from modular files
 export * from "./schema/enums";
+export * from "./schema/equipment";
+export * from "./schema/laboratories";
 export * from "./schema/users";
+

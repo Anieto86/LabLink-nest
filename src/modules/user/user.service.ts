@@ -4,7 +4,7 @@
  */
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { hashPassword } from "../../infra/security/hash";
-import type { UserCreate, UserUpdate } from "./dtos/users.dtos";
+import type { UserCreate, UserUpdate } from "./dto/users.dtos";
 import { toUserRead } from "./user.mapper";
 import { UsersRepo } from "./user.repo";
 

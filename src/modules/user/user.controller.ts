@@ -11,7 +11,7 @@ import {
 	Put,
 	Query,
 } from "@nestjs/common";
-import { userCreateDto, userUpdateDto } from "./dtos/users.dtos";
+import { userCreateDto, userUpdateDto } from "./dto/users.dtos";
 import { UserService } from "./user.service";
 
 @Controller("user")
@@ -20,7 +20,9 @@ export class UserController {
 
 	@Get("info")
 	async getUserInfo(@Query("id", ParseIntPipe) id: number) {
-		return this.userService.getUserInfo(id);
+	const result = await this.userService.getUserInfo(id);
+	console.log("Controller getUserInfo result:", result);
+	return result;
 	}
 
 	@Get("by-email")

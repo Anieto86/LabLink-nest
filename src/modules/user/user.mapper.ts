@@ -1,6 +1,6 @@
 import type { InferSelectModel } from "drizzle-orm";
 import type { users } from "../../infra/db/schema/users";
-import type { UserRead } from "./dtos/users.dtos";
+import type { UserRead } from "./dto/users.dtos";
 
 type UserRow = InferSelectModel<typeof users>;
 
