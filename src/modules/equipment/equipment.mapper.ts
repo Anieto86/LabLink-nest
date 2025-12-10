@@ -12,7 +12,7 @@ export function toEquipmentReadDto(e: EquipmentRow): EquipmentReadDto {
 		name: e.name,
 		type: e.type,
 		status: e.status,
-		location: e.location,
+    laboratoryId: e.laboratoryId,
 		createdAt: e.createdAt?.toISOString() ?? new Date().toISOString(),
 		updatedAt: e.updatedAt?.toISOString() ?? new Date().toISOString(),
 	};

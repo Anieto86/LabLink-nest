@@ -5,7 +5,7 @@ import { userRole } from "./enums";
  * Users table - Manages user accounts and authentication
  * Stores user information, roles, and account status
  */
-export const users = pgTable(
+export const user = pgTable(
 	"users",
 	{
 		id: bigserial("id", { mode: "number" }).primaryKey(),

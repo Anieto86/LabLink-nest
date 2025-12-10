@@ -6,7 +6,7 @@ import { laboratories } from "./laboratories";
  * Equipment table - Manages laboratory equipment and instruments
  * Tracks equipment status, location, and maintenance information
  */
-export const equipments = pgTable(
+export const equipment = pgTable(
 	"equipments",
 	{
 		id: bigserial("id", { mode: "number" }).primaryKey(),
