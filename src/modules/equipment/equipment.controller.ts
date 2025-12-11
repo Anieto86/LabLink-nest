@@ -7,7 +7,6 @@ import { EquipmentService } from './equipment.service';
 export class EquipmentController {
   constructor(private readonly equipmentService: EquipmentService) {}
 
-
   /**
    * GET /equipment
    * List all equipment

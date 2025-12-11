@@ -1,25 +1,33 @@
 # LabLink-nest
 
 Modular API project built with NestJS, TypeScript, and Drizzle ORM. Includes tools for development, testing, and integrated study workflows.
-
-## 📁 Directory Structure
+Directory Structure
+## 📁
 
 ```
 src/
 ├── main.ts                  # NestJS entrypoint
 ├── app.module.ts            # Main module
 ├── modules/
-│   └── example/             # Example module
-│       ├── example.controller.ts
-│       ├── example.service.ts
-│       ├── example.repo.ts
-│       └── example.controller.spec.ts
+│   └── equipment/           # Example module (full structure)
+│       ├── equipment.controller.ts   # Controller
+│       ├── equipment.service.ts      # Service
+│       ├── equipment.repo.ts         # Repository
+│       ├── equipment.mapper.ts       # Mapper
+│       ├── dto/
+│       │   └── equipment.dto.ts      # DTOs (Zod)
+│       ├── entities/
+│       │   └── equipment.entity.ts   # Entity definitions
+│       ├── schema/
+│       │   └── equipment.ts          # Drizzle table schema
+├── module/
+│   └── laboratory/          # Laboratory module
 ├── infra/
-│   └── db/
-│       ├── schema.ts        # Drizzle schema definition
-│       └── client.ts        # Database connection config
+│   ├── db/                  # Drizzle schema and client
+│   └── security/            # Hashing and security utils
 ├── config/
-│   └── env.ts               # Environment validation (Zod)
+│   ├── env.ts               # Environment validation (Zod)
+│   └── logger.ts            # Logger config
 ```
 
 ## 🚀 Quick Commands
@@ -39,8 +47,18 @@ pnpm test          # Run tests with Jest
 - **Biome**: Formatting, linting, import sorting
 - **Jest**: Integrated testing with NestJS
 - **Drizzle ORM**: Database access and migrations
+- **Swagger**: API documentation and live testing (accede a `/api-docs` en el servidor)
 - **Obsidian Integration**: Sync and templates for study
 - **Warp Workflows**: Terminal aliases and commands
+
+## 📖 API Documentation
+
+Swagger está integrado para visualizar y probar la API. Accede a la documentación interactiva en:
+
+```
+http://localhost:3000/api-docs
+```
+cuando el servidor esté en ejecución.
 
 ## 📚 Study & Sync Workflows
 
@@ -81,6 +99,7 @@ Drizzle ORM configuration is in `drizzle.config.ts` and adapts the PostgreSQL co
 - Database schema is in `src/infra/db/schema.ts`.
 - Migrations are stored in `drizzle/migrations`.
 
+
 ### Useful Commands
 
 ```bash
@@ -89,4 +108,22 @@ pnpm db:migrate    # Apply migrations to the database
 pnpm db:studio     # Open Drizzle Studio GUI
 ```
 
-Adapt variables for your environment (local, Docker, production) to ensure correct connection.
+### Migration Scripts: Idempotency
+
+Los scripts de migración están diseñados para ser idempotentes: usan bloques `IF NOT EXISTS` para crear tipos, tablas, índices y claves foráneas solo si no existen. Esto permite ejecutar las migraciones múltiples veces sin errores por duplicados.
+
+Ejemplo:
+
+```sql
+DO $$
+BEGIN
+	IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'users') THEN
+		CREATE TABLE "users" (...);
+	END IF;
+END
+$$;
+```
+
+Esto asegura migraciones seguras y repetibles en cualquier entorno.
+
+Adapt variables para tu entorno (local, Docker, producción) para asegurar la conexión correcta.
