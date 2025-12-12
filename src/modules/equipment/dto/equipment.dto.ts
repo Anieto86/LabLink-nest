@@ -1,4 +1,4 @@
-import { equipmentStatus } from "src/infra/db/schema/enums";
+import { equipmentStatus } from "src/infra/db/schema";
 import { z } from "zod";
 
 /** = EquipmentBase */

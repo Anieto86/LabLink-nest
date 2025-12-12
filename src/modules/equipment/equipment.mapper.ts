@@ -1,5 +1,5 @@
 import type { InferSelectModel } from "drizzle-orm";
-import type { equipment } from "../../infra/db/schema/equipment";
+import type { equipment } from "../../infra/db/schema";
 import type { EquipmentReadDto } from "./dto/equipment.dto";
 
 
@@ -16,8 +16,8 @@ export function toEquipmentReadDto(e: EquipmentRow): EquipmentReadDto {
 		name: e.name,
 		type: e.type ?? undefined,
 		laboratoryId: e.laboratoryId,
-		status: e.status,
-		createdAt: e.createdAt ? e.createdAt.toISOString() : null,
-		updatedAt: e.updatedAt ? e.updatedAt.toISOString() : null,
+		status: e.status as EquipmentReadDto["status"],
+		createdAt: e.createdAt,
+		updatedAt: null,
 	};
 }

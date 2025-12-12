@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { userRole } from "../../../infra/db/schema/enums";
+import { userRole } from "../../../infra/db/schema";
 
 /** = UserBase */
 export const userBaseDto = z.object({
