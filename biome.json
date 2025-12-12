@@ -58,5 +58,17 @@
 			"!**/.git",
 			"!**/drizzle/migrations"
 		]
-	}
+	},
+	"overrides": [
+		{
+			"files": "*.controller.ts",
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUnusedVariables": "off"
+					}
+				}
+			}
+		}
+	]
 }

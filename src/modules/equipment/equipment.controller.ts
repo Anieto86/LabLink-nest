@@ -11,7 +11,7 @@ import {
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { createEquipmentDto, updateEquipmentDto } from "./dto/equipment.dto";
-import type { EquipmentService } from "./equipment.service";
+import { EquipmentService } from "./equipment.service";
 
 @ApiTags("equipment")
 @Controller("equipment")
