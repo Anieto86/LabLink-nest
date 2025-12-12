@@ -13,8 +13,14 @@
  */
 
 // Re-export all schemas from modular files
+
 export * from "./schema/enums";
 export * from "./schema/equipment";
+export * from "./schema/experimentRecords";
+export * from "./schema/experiments";
+export * from "./schema/formTemplates";
+export * from "./schema/formTemplateVersions";
 export * from "./schema/laboratories";
+export * from "./schema/reservations";
+export * from "./schema/storage";
 export * from "./schema/users";
-
