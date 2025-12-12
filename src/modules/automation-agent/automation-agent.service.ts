@@ -1,18 +1,18 @@
 import { Injectable } from "@nestjs/common";
 
-// Define un tipo seguro para el payload
+// Define a safe type for the payload
 export type AgentCommandPayload = Record<string, unknown> | undefined;
 
 @Injectable()
 export class AutomationAgentService {
 	async executeCommand(action: string, payload?: AgentCommandPayload) {
-		// Ejemplo: lógica simple para demo
+		// Example: simple logic for demo
 		switch (action) {
 			case "create-test-equipment":
-				// Aquí iría la lógica real para crear equipos de prueba
-				return { status: "ok", message: "Equipos de prueba creados", payload };
+				// Here would go the real logic to create test equipment
+				return { status: "ok", message: "Test equipment created", payload };
 			default:
-				return { status: "error", message: "Acción no reconocida", action };
+				return { status: "error", message: "Unrecognized action", action };
 		}
 	}
 }

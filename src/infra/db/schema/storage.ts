@@ -26,7 +26,7 @@ export const storage = pgTable(
 		index("ix_storage_id").using("btree", table.id.asc().nullsLast().op("int4_ops")),
 		foreignKey({
 			columns: [table.laboratoryId],
-			foreignColumns: [laboratories.id], // Ajusta si tienes el schema de laboratories importado
+			foreignColumns: [laboratories.id], // Adjust if you have the laboratories schema imported
 			name: "storage_laboratory_id_fkey",
 		}).onDelete("set null"),
 	]

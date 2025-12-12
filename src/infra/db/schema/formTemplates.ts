@@ -11,7 +11,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { user } from "../schema";
 
-// Ajustado para reflejar la estructura real de la base de datos según introspección
+// Adjusted to reflect the real database structure according to introspection
 export const formTemplates = pgTable(
 	"form_templates",
 	{
@@ -25,12 +25,12 @@ export const formTemplates = pgTable(
 	},
 	(table) => [
 		index("ix_form_templates_id").using("btree", table.id.asc().nullsLast().op("int4_ops")),
-		// Asegúrate de importar el esquema de users y usar la columna correcta
+		// Make sure to import the users schema and use the correct column
 		foreignKey({
 			columns: [table.createdBy],
 			foreignColumns: [
-				// Importa y usa la columna id de la tabla users
-				// Asegúrate de importar { users } desde el schema correspondiente arriba
+				// Import and use the id column from the users table
+				// Make sure to import { user } from the corresponding schema above
 				user.id,
 			],
 			name: "form_templates_created_by_fkey",

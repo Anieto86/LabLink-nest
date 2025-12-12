@@ -11,7 +11,8 @@
 		"lint": "pnpm biome lint .",
 		"format": "pnpm biome format --write .",
 		"db:gen": "drizzle-kit generate",
-		"db:migrate": "drizzle-kit migrate"
+		"db:migrate": "drizzle-kit migrate",
+		"db:studio": "drizzle-kit studio"
 	},
 	"keywords": [],
 	"author": "",
@@ -25,7 +26,6 @@
 		"@nestjs/swagger": "^11.2.3",
 		"bcrypt": "^6.0.0",
 		"dotenv": "^17.2.3",
-		"drizzle-kit": "^0.31.7",
 		"drizzle-orm": "^0.44.7",
 		"pg": "^8.16.3",
 		"pino": "^10.1.0",
@@ -42,6 +42,7 @@
 		"@types/jest": "^30.0.0",
 		"@types/node": "^24.10.1",
 		"@types/pg": "^8.15.6",
+		"drizzle-kit": "^0.31.7",
 		"jest": "^30.2.0",
 		"supertest": "^7.1.4",
 		"ts-jest": "^29.4.6",

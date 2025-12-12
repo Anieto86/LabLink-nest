@@ -1,7 +1,7 @@
 import { date, foreignKey, index, integer, pgTable, serial, time } from "drizzle-orm/pg-core";
-import { user } from "./users";
-import { laboratories } from "./laboratories";
 import { equipments } from "drizzle/migrations/schema";
+import { laboratories } from "./laboratories";
+import { user } from "./users";
 
 export const reservations = pgTable(
 	"reservations",
@@ -18,17 +18,17 @@ export const reservations = pgTable(
 		index("ix_reservations_id").using("btree", table.id.asc().nullsLast().op("int4_ops")),
 		foreignKey({
 			columns: [table.laboratoryId],
-			foreignColumns: [laboratories.id], // Ajusta si tienes el schema de laboratories importado
+			foreignColumns: [laboratories.id], // Adjust if you have the laboratories schema imported
 			name: "reservations_laboratory_id_fkey",
 		}).onDelete("set null"),
 		foreignKey({
 			columns: [table.equipmentId],
-			foreignColumns: [equipments.id], // Ajusta si tienes el schema de equipment importado
+			foreignColumns: [equipments.id], // Adjust if you have the equipment schema imported
 			name: "reservations_equipment_id_fkey",
 		}).onDelete("set null"),
 		foreignKey({
 			columns: [table.userId],
-			foreignColumns: [user.id], // Ajusta si tienes el schema de users importado
+			foreignColumns: [user.id], // Adjust if you have the users schema imported
 			name: "reservations_user_id_fkey",
 		}).onDelete("set null"),
 	]

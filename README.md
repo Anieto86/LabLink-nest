@@ -51,14 +51,43 @@ pnpm test          # Run tests with Jest
 - **Obsidian Integration**: Sync and templates for study
 - **Warp Workflows**: Terminal aliases and commands
 
+
+## 🗄️ Migrations & Schemas (Drizzle ORM)
+
+This project uses **Drizzle ORM** to define the database structure and manage migrations in a safe and professional way.
+
+### Schema Structure
+- Drizzle schema files are located in `src/infra/db/schema/` and define tables, types, and relationships using TypeScript.
+- Each module has its own schema file for modularity.
+- The `src/infra/db/schema.ts` file centralizes and exports all schemas so Drizzle can detect them.
+
+### Migration Workflow
+1. **Modify or create schemas** in `src/infra/db/schema/`.
+2. Run `pnpm db:gen` to generate a new SQL migration based on detected changes.
+3. Review the generated file in `drizzle/migrations/` (optional, for quality control).
+4. Run `pnpm db:migrate` to apply the migration to the database.
+5. (Optional) Use `pnpm db:studio` to explore the database with Drizzle Studio.
+
+### Syncing with an Existing Database
+If your database already has tables created manually or by other systems, use:
+
+```bash
+pnpm drizzle-kit introspect
+```
+
+This will generate schemas based on the actual structure of your database, allowing you to synchronize and avoid duplication errors.
+
+**Recommendation:** Always keep your schemas and migrations in sync to ensure database integrity and traceability.
+
+---
 ## 📖 API Documentation
 
-Swagger está integrado para visualizar y probar la API. Accede a la documentación interactiva en:
+Swagger is integrated to visualize and test the API. Access the interactive documentation at:
 
 ```
 http://localhost:3000/api-docs
 ```
-cuando el servidor esté en ejecución.
+when the server is running.
 
 ## 📚 Study & Sync Workflows
 
