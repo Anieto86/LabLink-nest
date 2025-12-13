@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
-import { CreateLaboratoryDto } from "./dto/create-laboratory.dto";
-import { UpdateLaboratoryDto } from "./dto/update-laboratory.dto";
-import { LaboratoryService } from "./laboratory.service";
+import type { CreateLaboratoryDto } from "./dto/create-laboratory.dto";
+import type { UpdateLaboratoryDto } from "./dto/update-laboratory.dto";
+import type { LaboratoryService } from "./laboratory.service";
 
 @Controller("laboratory")
 export class LaboratoryController {

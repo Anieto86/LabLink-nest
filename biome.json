@@ -9,7 +9,8 @@
 				"noUnusedImports": "error",
 				"noUnusedVariables": "error",
 				"noConstantCondition": "error",
-				"useExhaustiveDependencies": "warn"
+				"useExhaustiveDependencies": "warn",
+				"noPrecisionLoss": "off"
 			},
 			"style": {
 				"useImportType": "error",
@@ -61,7 +62,7 @@
 	},
 	"overrides": [
 		{
-			"files": ["*.controller.ts"],
+			"includes": ["*.controller.ts"],
 			"linter": {
 				"rules": {
 					"correctness": {

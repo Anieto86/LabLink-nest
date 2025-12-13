@@ -11,11 +11,11 @@ import {
 	Put,
 	Query,
 } from "@nestjs/common";
-import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { userCreateDto, userUpdateDto } from "./dto/users.dto";
 import { UserService } from "./user.service";
 
-@ApiTags('user')
+@ApiTags("user")
 @Controller("user")
 export class UserController {
 	constructor(@Inject(UserService) private readonly userService: UserService) {}
@@ -24,9 +24,9 @@ export class UserController {
 	 * GET /user/:id
 	 * Get user by id
 	 */
-	@ApiOperation({ summary: 'Get user by id' })
-	@ApiParam({ name: 'id', type: Number })
-	@ApiResponse({ status: 200, description: 'User found.' })
+	@ApiOperation({ summary: "Get user by id" })
+	@ApiParam({ name: "id", type: Number })
+	@ApiResponse({ status: 200, description: "User found." })
 	@Get(":id")
 	async getById(@Param("id", ParseIntPipe) id: number) {
 		return await this.userService.getUserInfo(id);
@@ -36,9 +36,9 @@ export class UserController {
 	 * GET /user/by-email?email=...
 	 * Get user by email
 	 */
-	@ApiOperation({ summary: 'Get user by email' })
-	@ApiQuery({ name: 'email', type: String })
-	@ApiResponse({ status: 200, description: 'User found.' })
+	@ApiOperation({ summary: "Get user by email" })
+	@ApiQuery({ name: "email", type: String })
+	@ApiResponse({ status: 200, description: "User found." })
 	@Get("by-email")
 	async getByEmail(@Query("email") email: string) {
 		const emailResult = userCreateDto.shape.email.safeParse(email);
@@ -52,9 +52,9 @@ export class UserController {
 	 * POST /user
 	 * Create new user
 	 */
-	@ApiOperation({ summary: 'Create new user' })
+	@ApiOperation({ summary: "Create new user" })
 	@ApiBody({ type: Object })
-	@ApiResponse({ status: 201, description: 'User created.' })
+	@ApiResponse({ status: 201, description: "User created." })
 	@Post()
 	async create(@Body() body: unknown) {
 		const parseResult = userCreateDto.safeParse(body);

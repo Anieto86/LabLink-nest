@@ -2,7 +2,6 @@ import type { InferSelectModel } from "drizzle-orm";
 import type { equipment } from "../../infra/db/schema";
 import type { EquipmentReadDto } from "./dto/equipment.dto";
 
-
 // Ajusta los tipos segun tu DTO real
 
 type EquipmentRow = InferSelectModel<typeof equipment>;
