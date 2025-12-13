@@ -26,11 +26,14 @@ console.log(`🔗 Database URL being used: ${finalDatabaseUrl}`);
 
 export default {
 	schema: "./src/infra/db/schema.ts",
-	out: "./drizzle/migrations", // carpeta de migraciones (puede ser "./drizzle" si preferís)
+	out: "./drizzle/migrations", // Carpeta de migraciones SQL (requerida por db:migrate)
 	dialect: "postgresql",
 	dbCredentials: {
 		url: finalDatabaseUrl,
 	},
 	verbose: true,
 	strict: true,
+	// Nota: drizzle-kit usa 'out' para generate/migrate.
+	// Introspect también usa 'out' para schema/relations.ts.
+	// Si necesitas que introspect actualice src/infra/db, mueve los archivos generados manualmente.
 } satisfies Config;

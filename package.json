@@ -12,7 +12,8 @@
 		"format": "pnpm biome format --write .",
 		"db:gen": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
-		"db:studio": "drizzle-kit studio"
+		"db:studio": "drizzle-kit studio",
+		"db:introspect": "drizzle-kit introspect"
 	},
 	"keywords": [],
 	"author": "",

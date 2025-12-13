@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { auditLogs, equipment, experimentRecordFiles, experimentRecords, experiments, experimentStatusHistory, formTemplates, formTemplateVersions, laboratories, laboratoryMembers, reservations, resources, users } from "./schema";
+import { laboratories, equipment, experiments, formTemplates, formTemplateVersions, users, experimentRecords, laboratoryMembers, experimentRecordFiles, experimentStatusHistory, auditLogs, resources, reservations } from "./schema";
 
 export const equipmentRelations = relations(equipment, ({one}) => ({
 	laboratory: one(laboratories, {
