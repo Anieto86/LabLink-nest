@@ -9,22 +9,25 @@ src/
 ├── main.ts                  # NestJS entrypoint
 ├── app.module.ts            # Main module
 ├── modules/
-│   └── equipment/           # Example module (full structure)
-│       ├── equipment.controller.ts   # Controller
-│       ├── equipment.service.ts      # Service
-│       ├── equipment.repo.ts         # Repository
-│       ├── equipment.mapper.ts       # Mapper
-│       ├── dto/
-│       │   └── equipment.dto.ts      # DTOs (Zod)
-│       ├── entities/
-│       │   └── equipment.entity.ts   # Entity definitions
-│       ├── schema/
-│       │   └── equipment.ts          # Drizzle table schema
-├── module/
-│   └── laboratory/          # Laboratory module
+│   ├── equipment/           # Equipment module
+│   │   ├── equipment.controller.ts   # Controller
+│   │   ├── equipment.service.ts      # Service
+│   │   ├── equipment.repo.ts         # Repository
+│   │   ├── equipment.mapper.ts       # Mapper
+│   │   ├── dto/
+│   │   │   └── equipment.dto.ts      # DTOs (Zod)
+│   │   └── entities/
+│   │       └── equipment.entity.ts   # Entity definitions
+│   ├── laboratory/          # Laboratory module
+│   ├── user/                # User module
+│   └── automation-agent/    # Automation agent module
 ├── infra/
-│   ├── db/                  # Drizzle schema and client
-│   └── security/            # Hashing and security utils
+│   ├── db/
+│   │   ├── schema.ts        # Centralized Drizzle schema (all tables + enums)
+│   │   ├── relations.ts     # Table relations
+│   │   └── client.ts        # Database client
+│   └── security/
+│       └── hash.ts          # Hashing and security utils
 ├── config/
 │   ├── env.ts               # Environment validation (Zod)
 │   └── logger.ts            # Logger config
@@ -47,7 +50,7 @@ pnpm test          # Run tests with Jest
 - **Biome**: Formatting, linting, import sorting
 - **Jest**: Integrated testing with NestJS
 - **Drizzle ORM**: Database access and migrations
-- **Swagger**: API documentation and live testing (accede a `/api-docs` en el servidor)
+- **Swagger**: API documentation and live testing (access `/api-docs` on the server)
 - **Obsidian Integration**: Sync and templates for study
 - **Warp Workflows**: Terminal aliases and commands
 
@@ -57,12 +60,12 @@ pnpm test          # Run tests with Jest
 This project uses **Drizzle ORM** to define the database structure and manage migrations in a safe and professional way.
 
 ### Schema Structure
-- Drizzle schema files are located in `src/infra/db/schema/` and define tables, types, and relationships using TypeScript.
-- Each module has its own schema file for modularity.
-- The `src/infra/db/schema.ts` file centralizes and exports all schemas so Drizzle can detect them.
+- The centralized Drizzle schema is located in `src/infra/db/schema.ts` and defines all tables, enums, and types using TypeScript.
+- Table relations are defined in `src/infra/db/relations.ts`.
+- All modules import table definitions from the centralized schema for consistency and type safety.
 
 ### Migration Workflow
-1. **Modify or create schemas** in `src/infra/db/schema/`.
+1. **Modify the centralized schema** in `src/infra/db/schema.ts`.
 2. Run `pnpm db:gen` to generate a new SQL migration based on detected changes.
 3. Review the generated file in `drizzle/migrations/` (optional, for quality control).
 4. Run `pnpm db:migrate` to apply the migration to the database.
@@ -72,10 +75,10 @@ This project uses **Drizzle ORM** to define the database structure and manage mi
 If your database already has tables created manually or by other systems, use:
 
 ```bash
-pnpm drizzle-kit introspect
+pnpm db:introspect
 ```
 
-This will generate schemas based on the actual structure of your database, allowing you to synchronize and avoid duplication errors.
+This will generate schemas based on the actual structure of your database. **Note**: You'll need to manually re-add `pgEnum` definitions to `src/infra/db/schema.ts` after introspection, as Drizzle introspection doesn't capture enum types.
 
 **Recommendation:** Always keep your schemas and migrations in sync to ensure database integrity and traceability.
 
@@ -87,7 +90,22 @@ Swagger is integrated to visualize and test the API. Access the interactive docu
 ```
 http://localhost:3000/api-docs
 ```
+
 when the server is running.
+
+---
+
+## 🔒 Security Best Practices
+
+This project follows security best practices:
+
+- **No credentials in logs**: Database connection logs hide sensitive information (user/password)
+- **Enum validation**: `status` and `role` columns use PostgreSQL ENUMs for data integrity
+- **No console.log in production**: Sensitive data logging removed from repositories
+- **Type safety**: Full TypeScript coverage with strict mode
+- **Input validation**: Zod schemas for all DTOs
+
+---
 
 ## 📚 Study & Sync Workflows
 
@@ -139,9 +157,9 @@ pnpm db:studio     # Open Drizzle Studio GUI
 
 ### Migration Scripts: Idempotency
 
-Los scripts de migración están diseñados para ser idempotentes: usan bloques `IF NOT EXISTS` para crear tipos, tablas, índices y claves foráneas solo si no existen. Esto permite ejecutar las migraciones múltiples veces sin errores por duplicados.
+Migration scripts are designed to be idempotent: they use `IF NOT EXISTS` blocks to create types, tables, indexes, and foreign keys only if they don't already exist. This allows running migrations multiple times without errors from duplicates.
 
-Ejemplo:
+Example:
 
 ```sql
 DO $$
@@ -153,6 +171,6 @@ END
 $$;
 ```
 
-Esto asegura migraciones seguras y repetibles en cualquier entorno.
+This ensures safe and repeatable migrations in any environment.
 
-Adapt variables para tu entorno (local, Docker, producción) para asegurar la conexión correcta.
+Adapt variables for your environment (local, Docker, production) to ensure the correct connection.

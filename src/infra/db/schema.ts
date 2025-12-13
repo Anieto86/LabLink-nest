@@ -59,7 +59,7 @@ export const equipment = pgTable(
 		type: text(),
 		// You can use { mode: "bigint" } if numbers are exceeding js number limitations
 		laboratoryId: bigint("laboratory_id", { mode: "number" }).notNull(),
-		status: text().default("available").notNull(),
+	status: equipmentStatus().default("available").notNull(),
 		createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
 			.defaultNow()
 			.notNull(),
@@ -259,7 +259,7 @@ export const users = pgTable(
 			cache: 1,
 		}),
 		name: text().notNull(),
-		role: text().default("viewer").notNull(),
+		role: userRole().default("viewer").notNull(),
 		email: text().notNull(),
 		passwordHash: text("password_hash").notNull(),
 		isActive: boolean("is_active").default(true).notNull(),

@@ -12,7 +12,6 @@ type UpdatableUser = Omit<InferInsertModel<typeof users>, "id" | "createdAt" | "
 export const UserRepo = {
 	findById: async (id: number) => {
 		const [row] = await db.select().from(users).where(eq(users.id, id)).limit(1);
-		console.log("findById result:", row);
 		return row ?? null;
 	},
 	findByEmail: async (email: string) => {

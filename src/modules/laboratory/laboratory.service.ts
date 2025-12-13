@@ -1,26 +1,42 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import type { CreateLaboratoryDto } from "./dto/create-laboratory.dto";
 import type { UpdateLaboratoryDto } from "./dto/update-laboratory.dto";
+import { toLaboratoryRead } from "./laboratory.mapper";
+import { LaboratoryRepo } from "./laboratory.repo";
 
 @Injectable()
 export class LaboratoryService {
-	create(_createLaboratoryDto: CreateLaboratoryDto) {
-		return "This action adds a new laboratory";
+	async create(createLaboratoryDto: CreateLaboratoryDto) {
+		const newLaboratory = await LaboratoryRepo.create(createLaboratoryDto);
+		return toLaboratoryRead(newLaboratory);
 	}
 
-	findAll() {
-		return `This action returns all laboratory`;
+	async findAll() {
+		const laboratories = await LaboratoryRepo.findAll();
+		return laboratories.map(toLaboratoryRead);
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} laboratory`;
+	async findOne(id: number) {
+		const laboratory = await LaboratoryRepo.findById(id);
+		if (!laboratory) {
+			throw new NotFoundException(`Laboratory with ID ${id} not found`);
+		}
+		return toLaboratoryRead(laboratory);
 	}
 
-	update(id: number, _updateLaboratoryDto: UpdateLaboratoryDto) {
-		return `This action updates a #${id} laboratory`;
+	async update(id: number, updateLaboratoryDto: UpdateLaboratoryDto) {
+		const updated = await LaboratoryRepo.update(id, updateLaboratoryDto);
+		if (!updated) {
+			throw new NotFoundException(`Laboratory with ID ${id} not found`);
+		}
+		return toLaboratoryRead(updated);
 	}
 
-	remove(id: number) {
-		return `This action removes a #${id} laboratory`;
+	async remove(id: number) {
+		const deleted = await LaboratoryRepo.delete(id);
+		if (!deleted) {
+			throw new NotFoundException(`Laboratory with ID ${id} not found`);
+		}
+		return toLaboratoryRead(deleted);
 	}
 }

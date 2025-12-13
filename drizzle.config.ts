@@ -22,7 +22,9 @@ if (!process.env.DATABASE_URL) {
 	);
 }
 
-console.log(`🔗 Database URL being used: ${finalDatabaseUrl}`);
+// Solo loguear host/base sin credenciales
+const safeUrl = `postgresql://${dbHost}:${dbPort}/${dbName}`;
+console.log(`🔗 Database URL being used: ${safeUrl}`);
 
 export default {
 	schema: "./src/infra/db/schema.ts",

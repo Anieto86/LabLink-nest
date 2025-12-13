@@ -1,4 +1,7 @@
-import { PartialType } from "@nestjs/swagger";
-import { CreateLaboratoryDto } from "./create-laboratory.dto";
+import type { z } from "zod";
+import { createLaboratoryDto } from "./create-laboratory.dto";
 
-export class UpdateLaboratoryDto extends PartialType(CreateLaboratoryDto) {}
+// DTO para actualización (todos los campos opcionales)
+export const updateLaboratoryDto = createLaboratoryDto.partial();
+
+export type UpdateLaboratoryDto = z.infer<typeof updateLaboratoryDto>;
