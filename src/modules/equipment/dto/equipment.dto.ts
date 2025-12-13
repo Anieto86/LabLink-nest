@@ -1,13 +1,12 @@
-import { equipmentStatus } from "src/infra/db/schema";
+import { createInsertSchema } from "drizzle-zod";
+import { equipment } from "src/infra/db/schema";
 import { z } from "zod";
 
 /** = EquipmentBase */
-export const equipmentBaseDto = z.object({
-	name: z.string().min(2, "Name is required").max(100, "Name is too long"),
-	type: z.string().max(100, "Type is too long").optional(),
-	laboratoryId: z.number().int(),
-	status: z.enum(equipmentStatus.enumValues).default("available"),
-});
+export const equipmentBaseDto = createInsertSchema(equipment, {
+	name: (schema) => schema.min(2, "Name is required").max(100, "Name is too long"),
+	type: (schema) => schema.max(100, "Type is too long").optional(),
+}).pick({ name: true, type: true, laboratoryId: true, status: true });
 
 export const createEquipmentDto = equipmentBaseDto;
 

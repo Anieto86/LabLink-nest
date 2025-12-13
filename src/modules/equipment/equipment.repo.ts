@@ -1,39 +1,54 @@
+import { Inject, Injectable } from "@nestjs/common";
 import { eq, type InferInsertModel } from "drizzle-orm";
-import { db } from "src/infra/db/client";
-import { equipment } from "src/infra/db/schema";
+import type { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { DB_CLIENT } from "src/infra/db/db.constants";
+import * as schema from "src/infra/db/schema";
 
-type NewEquipment = InferInsertModel<typeof equipment>;
+type NewEquipment = InferInsertModel<typeof schema.equipment>;
 type UpdatableEquipment = Omit<
-	InferInsertModel<typeof equipment>,
+	InferInsertModel<typeof schema.equipment>,
 	"id" | "createdAt" | "updatedAt"
 >;
 
-export const EquipmentRepo = {
-	findById: async (id: number) => {
-		const [row] = await db.select().from(equipment).where(eq(equipment.id, id)).limit(1);
+@Injectable()
+export class EquipmentRepo {
+	constructor(
+		@Inject(DB_CLIENT)
+		private readonly db: NodePgDatabase<typeof schema>
+	) {}
+
+	async findById(id: number) {
+		const [row] = await this.db
+			.select()
+			.from(schema.equipment)
+			.where(eq(schema.equipment.id, id))
+			.limit(1);
 		return row ?? null;
-	},
+	}
 
-	findAll: async () => {
-		return await db.select().from(equipment);
-	},
+	async findAll() {
+		return await this.db.select().from(schema.equipment);
+	}
 
-	create: async (newEquipment: NewEquipment) => {
-		const [row] = await db.insert(equipment).values(newEquipment).returning();
+	async create(newEquipment: NewEquipment) {
+		const [row] = await this.db.insert(schema.equipment).values(newEquipment).returning();
 		return row;
-	},
+	}
 
-	updateById: async (id: number, updateData: Partial<UpdatableEquipment>) => {
-		const [row] = await db
-			.update(equipment)
+	async updateById(id: number, updateData: Partial<UpdatableEquipment>) {
+		const [row] = await this.db
+			.update(schema.equipment)
 			.set(updateData)
-			.where(eq(equipment.id, id))
+			.where(eq(schema.equipment.id, id))
 			.returning();
 		return row ?? null;
-	},
+	}
 
-	deleteById: async (id: number) => {
-		const [row] = await db.delete(equipment).where(eq(equipment.id, id)).returning();
+	async deleteById(id: number) {
+		const [row] = await this.db
+			.delete(schema.equipment)
+			.where(eq(schema.equipment.id, id))
+			.returning();
 		return row ?? null;
-	},
-};
+	}
+}

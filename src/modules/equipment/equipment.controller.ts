@@ -4,6 +4,7 @@ import {
 	Controller,
 	Delete,
 	Get,
+	Inject,
 	Param,
 	ParseIntPipe,
 	Patch,
@@ -11,19 +12,30 @@ import {
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { createEquipmentDto, updateEquipmentDto } from "./dto/equipment.dto";
-import type { EquipmentService } from "./equipment.service";
+import {
+	CreateEquipmentDtoSwagger,
+	EquipmentDeleteResponseSwagger,
+	EquipmentReadDtoSwagger,
+	UpdateEquipmentDtoSwagger,
+} from "./dto/equipment.swagger.dto";
+import { EquipmentService } from "./equipment.service";
 
 @ApiTags("equipment")
 @Controller("equipment")
 export class EquipmentController {
-	constructor(private readonly equipmentService: EquipmentService) {}
+	constructor(@Inject(EquipmentService) private readonly equipmentService: EquipmentService) {}
 
 	/**
 	 * GET /equipment
 	 * List all equipment
 	 */
 	@ApiOperation({ summary: "List all equipment" })
-	@ApiResponse({ status: 200, description: "List of equipment returned." })
+	@ApiResponse({
+		status: 200,
+		description: "List of equipment returned.",
+		type: EquipmentReadDtoSwagger,
+		isArray: true,
+	})
 	@Get()
 	async getAll() {
 		return await this.equipmentService.getAllEquipment();
@@ -35,7 +47,7 @@ export class EquipmentController {
 	 */
 	@ApiOperation({ summary: "Get equipment by id" })
 	@ApiParam({ name: "id", type: Number })
-	@ApiResponse({ status: 200, description: "Equipment found." })
+	@ApiResponse({ status: 200, description: "Equipment found.", type: EquipmentReadDtoSwagger })
 	@Get(":id")
 	async getById(@Param("id", ParseIntPipe) id: number) {
 		return await this.equipmentService.getEquipmentById(id);
@@ -46,8 +58,8 @@ export class EquipmentController {
 	 * Create new equipment
 	 */
 	@ApiOperation({ summary: "Create new equipment" })
-	@ApiBody({ type: Object })
-	@ApiResponse({ status: 201, description: "Equipment created." })
+	@ApiBody({ type: CreateEquipmentDtoSwagger })
+	@ApiResponse({ status: 201, description: "Equipment created.", type: EquipmentReadDtoSwagger })
 	@Post()
 	async create(@Body() body: unknown) {
 		const parseResult = createEquipmentDto.safeParse(body);
@@ -63,8 +75,8 @@ export class EquipmentController {
 	 */
 	@ApiOperation({ summary: "Update existing equipment" })
 	@ApiParam({ name: "id", type: Number })
-	@ApiBody({ type: Object })
-	@ApiResponse({ status: 200, description: "Equipment updated." })
+	@ApiBody({ type: UpdateEquipmentDtoSwagger })
+	@ApiResponse({ status: 200, description: "Equipment updated.", type: EquipmentReadDtoSwagger })
 	@Patch(":id")
 	async update(@Param("id", ParseIntPipe) id: number, @Body() body: unknown) {
 		const parseResult = updateEquipmentDto.safeParse(body);
@@ -79,7 +91,11 @@ export class EquipmentController {
 	 */
 	@ApiOperation({ summary: "Delete equipment by id" })
 	@ApiParam({ name: "id", type: Number })
-	@ApiResponse({ status: 200, description: "Equipment deleted." })
+	@ApiResponse({
+		status: 200,
+		description: "Equipment deleted.",
+		type: EquipmentDeleteResponseSwagger,
+	})
 	@Delete(":id")
 	async delete(@Param("id", ParseIntPipe) id: number) {
 		return await this.equipmentService.deleteEquipment(id);

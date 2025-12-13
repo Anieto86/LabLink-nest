@@ -1,12 +1,12 @@
+import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
-import { userRole } from "../../../infra/db/schema";
+import { users } from "../../../infra/db/schema";
 
 /** = UserBase */
-export const userBaseDto = z.object({
-	name: z.string().min(2, "Name is required").max(50, "Name is too long"),
-	role: z.enum(userRole.enumValues),
-	email: z.string().email("Invalid email address"),
-});
+export const userBaseDto = createInsertSchema(users, {
+	name: (schema) => schema.min(2, "Name is required").max(50, "Name is too long"),
+	email: (schema) => schema.email("Invalid email address"),
+}).pick({ name: true, role: true, email: true });
 
 export const userCreateDto = userBaseDto.extend({
 	password: z

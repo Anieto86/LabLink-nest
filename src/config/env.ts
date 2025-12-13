@@ -18,6 +18,7 @@ export const envSchema = z.object({
 	JWT_EXPIRES: z.string().optional(),
 	JWT_ALG: z.string().optional(),
 	GOOGLE_CLIENT_ID: z.string().optional(),
+	SALT_ROUNDS: z.string().regex(/^\d+$/).optional(),
 });
 
 export function validateEnv(env: NodeJS.ProcessEnv) {

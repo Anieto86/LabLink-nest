@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import * as bcrypt from "bcrypt";
 
 const DEFAULT_SALT_ROUNDS = 10;
 
@@ -14,7 +14,8 @@ function getSaltRounds(): number {
 
 export async function hashPassword(password: string): Promise<string> {
 	const saltRounds = getSaltRounds();
-	return bcrypt.hash(password, saltRounds);
+	const hash = await bcrypt.hash(password, saltRounds);
+	return hash;
 }
 
 export async function comparePassword(password: string, hash: string): Promise<boolean> {

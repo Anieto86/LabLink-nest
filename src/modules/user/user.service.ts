@@ -2,7 +2,7 @@
  * UserService: Main service for user-related business logic.
  * Provides simple methods to retrieve user info by ID or email.
  */
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { hashPassword } from "../../infra/security/hash";
 import type { UserCreate, UserUpdate } from "./dto/users.dto";
 import { toUserRead } from "./user.mapper";
@@ -10,8 +10,10 @@ import { UserRepo } from "./user.repo";
 
 @Injectable()
 export class UserService {
+	constructor(@Inject(UserRepo) private readonly userRepo: UserRepo) {}
+
 	async getUserInfo(userId: number) {
-		const user = await UserRepo.findById(userId);
+		const user = await this.userRepo.findById(userId);
 		if (!user) {
 			throw new NotFoundException("User not found");
 		}
@@ -19,7 +21,7 @@ export class UserService {
 	}
 
 	async getUserByEmail(email: string) {
-		const user = await UserRepo.findByEmail(email);
+		const user = await this.userRepo.findByEmail(email);
 		if (!user) throw new NotFoundException("User not found");
 		return toUserRead(user);
 	}
@@ -28,7 +30,7 @@ export class UserService {
 		const passwordHash = await hashPassword(password);
 
 		try {
-			const user = await UserRepo.create({ ...rest, passwordHash });
+			const user = await this.userRepo.create({ ...rest, passwordHash });
 			return toUserRead(user);
 		} catch (error: unknown) {
 			if (isUniqueViolationError(error)) {
@@ -39,13 +41,13 @@ export class UserService {
 	}
 
 	async deleteUser(userId: number) {
-		const userDeleted = await UserRepo.deleteById(userId);
+		const userDeleted = await this.userRepo.deleteById(userId);
 		if (!userDeleted) throw new NotFoundException("User not found");
 		return { id: userDeleted.id };
 	}
 
 	async updateUser(id: number, updateData: UserUpdate) {
-		const existing = await UserRepo.findById(id);
+		const existing = await this.userRepo.findById(id);
 		if (!existing) {
 			throw new NotFoundException("User not found");
 		}
@@ -71,7 +73,7 @@ export class UserService {
 		}
 
 		try {
-			const updated = await UserRepo.updateById(id, updatePayload);
+			const updated = await this.userRepo.updateById(id, updatePayload);
 			if (!updated) throw new NotFoundException("User not found");
 			return toUserRead(updated);
 		} catch (err) {

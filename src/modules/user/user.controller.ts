@@ -13,6 +13,14 @@ import {
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { userCreateDto, userUpdateDto } from "./dto/users.dto";
+import {
+	CreateUserDtoSwagger,
+	UpdateUserDtoSwagger,
+	UserCreateResponseSwagger,
+	UserDeleteResponseSwagger,
+	UserReadDtoSwagger,
+	UserUpdateResponseSwagger,
+} from "./dto/users.swagger.dto";
 import { UserService } from "./user.service";
 
 @ApiTags("user")
@@ -26,7 +34,7 @@ export class UserController {
 	 */
 	@ApiOperation({ summary: "Get user by id" })
 	@ApiParam({ name: "id", type: Number })
-	@ApiResponse({ status: 200, description: "User found." })
+	@ApiResponse({ status: 200, description: "User found.", type: UserReadDtoSwagger })
 	@Get(":id")
 	async getById(@Param("id", ParseIntPipe) id: number) {
 		return await this.userService.getUserInfo(id);
@@ -38,7 +46,8 @@ export class UserController {
 	 */
 	@ApiOperation({ summary: "Get user by email" })
 	@ApiQuery({ name: "email", type: String })
-	@ApiResponse({ status: 200, description: "User found." })
+	@ApiResponse({ status: 200, description: "User deleted.", type: UserDeleteResponseSwagger })
+	@ApiResponse({ status: 200, description: "User found.", type: UserReadDtoSwagger })
 	@Get("by-email")
 	async getByEmail(@Query("email") email: string) {
 		const emailResult = userCreateDto.shape.email.safeParse(email);
@@ -53,8 +62,8 @@ export class UserController {
 	 * Create new user
 	 */
 	@ApiOperation({ summary: "Create new user" })
-	@ApiBody({ type: Object })
-	@ApiResponse({ status: 201, description: "User created." })
+	@ApiBody({ type: CreateUserDtoSwagger })
+	@ApiResponse({ status: 201, description: "User created.", type: UserCreateResponseSwagger })
 	@Post()
 	async create(@Body() body: unknown) {
 		const parseResult = userCreateDto.safeParse(body);
@@ -80,6 +89,8 @@ export class UserController {
 	 * Update user by id
 	 */
 	@Put(":id")
+	@ApiBody({ type: UpdateUserDtoSwagger })
+	@ApiResponse({ status: 200, description: "User updated.", type: UserUpdateResponseSwagger })
 	async update(@Param("id", ParseIntPipe) id: number, @Body() body: unknown) {
 		const parseResult = userUpdateDto.safeParse(body);
 		if (!parseResult.success) {
