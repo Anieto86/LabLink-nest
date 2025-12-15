@@ -4,7 +4,7 @@ import { ConfigModule } from "./config/config.module";
 import { DbModule } from "./infra/db/db.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { EquipmentModule } from "./modules/equipment/equipment.module";
-import { LaboratoryModule } from "./modules/laboratory/laboratory.module";
+import { LaboratoryModule } from "./modules/laboratories/laboratory.module";
 import { UserModule } from "./modules/user/user.module";
 
 @Module({
