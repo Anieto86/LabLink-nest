@@ -65,14 +65,6 @@ export class EquipmentReadDtoSwagger {
 		description: "Creation timestamp",
 	})
 	createdAt!: string | null;
-
-	@ApiProperty({
-		type: String,
-		format: "date-time",
-		nullable: true,
-		description: "Update timestamp",
-	})
-	updatedAt!: string | null;
 }
 
 export class EquipmentDeleteResponseSwagger {

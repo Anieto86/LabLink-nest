@@ -11,34 +11,36 @@ import {
 } from "@nestjs/common";
 import type { CreateLaboratoryDto } from "./dto/create-laboratory.dto";
 import type { UpdateLaboratoryDto } from "./dto/update-laboratory.dto";
-import { LaboratoryService } from "./laboratory.service";
+import { LaboratoriesService } from "./laboratories.service";
 
-@Controller("laboratory")
-export class LaboratoryController {
-	constructor(@Inject(LaboratoryService) private readonly laboratoryService: LaboratoryService) {}
+@Controller("laboratories")
+export class LaboratoriesController {
+	constructor(
+		@Inject(LaboratoriesService) private readonly laboratoriesService: LaboratoriesService
+	) {}
 
 	@Post()
 	create(@Body() createLaboratoryDto: CreateLaboratoryDto) {
-		return this.laboratoryService.create(createLaboratoryDto);
+		return this.laboratoriesService.create(createLaboratoryDto);
 	}
 
 	@Get()
 	findAll() {
-		return this.laboratoryService.findAll();
+		return this.laboratoriesService.findAll();
 	}
 
 	@Get(":id")
 	findOne(@Param("id", ParseIntPipe) id: number) {
-		return this.laboratoryService.findOne(id);
+		return this.laboratoriesService.findOne(id);
 	}
 
 	@Patch(":id")
 	update(@Param("id", ParseIntPipe) id: number, @Body() updateLaboratoryDto: UpdateLaboratoryDto) {
-		return this.laboratoryService.update(id, updateLaboratoryDto);
+		return this.laboratoriesService.update(id, updateLaboratoryDto);
 	}
 
 	@Delete(":id")
 	remove(@Param("id", ParseIntPipe) id: number) {
-		return this.laboratoryService.remove(id);
+		return this.laboratoriesService.remove(id);
 	}
 }

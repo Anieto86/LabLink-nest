@@ -14,7 +14,6 @@ export const equipmentReadDto = equipmentBaseDto.extend({
 	laboratoryId: equipmentBaseDto.shape.laboratoryId.nullable(),
 	id: z.number().int(),
 	createdAt: z.string().datetime().nullable(), // ISO string for API contract
-	updatedAt: z.string().datetime().nullable(), // ISO string for API contract
 });
 
 export const updateEquipmentDto = equipmentBaseDto.partial();

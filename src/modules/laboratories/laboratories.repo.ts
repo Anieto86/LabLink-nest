@@ -9,7 +9,7 @@ type NewLaboratory = Omit<InferInsertModel<typeof schema.laboratories>, "id" | "
 type UpdatableLaboratory = Partial<NewLaboratory>;
 
 @Injectable()
-export class LaboratoryRepo {
+export class LaboratoriesRepo {
 	constructor(@Inject(DB_CLIENT) private readonly db: NodePgDatabase<typeof schema>) {}
 
 	async findAll() {

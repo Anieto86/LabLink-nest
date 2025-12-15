@@ -17,6 +17,5 @@ export function toEquipmentReadDto(e: EquipmentRow): EquipmentReadDto {
 		laboratoryId: e.laboratoryId,
 		status: e.status as EquipmentReadDto["status"],
 		createdAt: e.createdAt,
-		updatedAt: null,
 	};
 }

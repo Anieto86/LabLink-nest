@@ -5,10 +5,7 @@ import { DB_CLIENT } from "src/infra/db/db.constants";
 import * as schema from "src/infra/db/schema";
 
 type NewEquipment = InferInsertModel<typeof schema.equipment>;
-type UpdatableEquipment = Omit<
-	InferInsertModel<typeof schema.equipment>,
-	"id" | "createdAt" | "updatedAt"
->;
+type UpdatableEquipment = Omit<InferInsertModel<typeof schema.equipment>, "id" | "createdAt">;
 
 @Injectable()
 export class EquipmentRepo {
