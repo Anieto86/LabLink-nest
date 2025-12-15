@@ -19,7 +19,7 @@ export const userCreateDto = userBaseDto.extend({
 export const userReadDto = userBaseDto.extend({
 	id: z.number().int(),
 	isActive: z.boolean(), // camelCase for API contract
-	createdAt: z.string().datetime().nullable(), // ISO string for API contract
+	createdAt: z.string().datetime(), // ISO string for API contract
 });
 
 /** = UserLogin */
