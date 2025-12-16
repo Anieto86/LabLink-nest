@@ -9,8 +9,7 @@ import {
 	Patch,
 	Post,
 } from "@nestjs/common";
-import type { CreateLaboratoryDto } from "./dto/create-laboratory.dto";
-import type { UpdateLaboratoryDto } from "./dto/update-laboratory.dto";
+import type { CreateLaboratoryDto, UpdateLaboratoryDto } from "./dto/laboratory.dto";
 import { LaboratoriesService } from "./laboratories.service";
 
 @Controller("laboratories")

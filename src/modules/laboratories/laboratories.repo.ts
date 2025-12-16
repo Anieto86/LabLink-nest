@@ -9,7 +9,7 @@ type NewLaboratory = Omit<InferInsertModel<typeof schema.laboratories>, "id" | "
 type UpdatableLaboratory = Partial<NewLaboratory>;
 
 @Injectable()
-export class LaboratoriesRepo {
+export class LaboratoryRepo {
 	constructor(@Inject(DB_CLIENT) private readonly db: NodePgDatabase<typeof schema>) {}
 
 	async findAll() {
@@ -29,7 +29,6 @@ export class LaboratoriesRepo {
 		const [newLaboratory] = await this.db.insert(schema.laboratories).values(data).returning();
 		return newLaboratory;
 	}
-
 	async update(id: number, data: UpdatableLaboratory) {
 		const [updated] = await this.db
 			.update(schema.laboratories)

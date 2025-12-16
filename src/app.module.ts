@@ -5,6 +5,7 @@ import { DbModule } from "./infra/db/db.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { EquipmentModule } from "./modules/equipment/equipment.module";
 import { LaboratoriesModule } from "./modules/laboratories/laboratories.module";
+import { LaboratoryMembersModule } from "./modules/laboratory-members/laboratory-members.module";
 import { UserModule } from "./modules/user/user.module";
 
 @Module({
@@ -16,6 +17,9 @@ import { UserModule } from "./modules/user/user.module";
 		UserModule,
 		EquipmentModule,
 		LaboratoriesModule,
+		LaboratoryMembersModule,
 	],
+	controllers: [],
+	providers: [],
 })
 export class AppModule {}

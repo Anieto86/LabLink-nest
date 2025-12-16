@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
 import { LaboratoriesController } from "./laboratories.controller";
-import { LaboratoriesRepo } from "./laboratories.repo";
+import { LaboratoryRepo } from "./laboratories.repo";
 import { LaboratoriesService } from "./laboratories.service";
 
 @Module({
 	controllers: [LaboratoriesController],
-	providers: [LaboratoriesService, LaboratoriesRepo],
+	providers: [LaboratoriesService, LaboratoryRepo],
 })
 export class LaboratoriesModule {}
