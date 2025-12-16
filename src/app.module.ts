@@ -4,6 +4,7 @@ import { ConfigModule } from "./config/config.module";
 import { DbModule } from "./infra/db/db.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { EquipmentModule } from "./modules/equipment/equipment.module";
+import { ExperimentsModule } from "./modules/experiments/experiments.module";
 import { LaboratoriesModule } from "./modules/laboratories/laboratories.module";
 import { LaboratoryMembersModule } from "./modules/laboratory-members/laboratory-members.module";
 import { UserModule } from "./modules/user/user.module";
@@ -18,6 +19,7 @@ import { UserModule } from "./modules/user/user.module";
 		EquipmentModule,
 		LaboratoriesModule,
 		LaboratoryMembersModule,
+		ExperimentsModule,
 	],
 	controllers: [],
 	providers: [],
