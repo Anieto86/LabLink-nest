@@ -1,6 +1,6 @@
 import { createInsertSchema } from "drizzle-zod";
+import { laboratoryMembers } from "src/infra/db/schema";
 import { z } from "zod";
-import { laboratoryMembers } from "../../../infra/db/schema";
 
 const laboratoryMemberInsertSchema = createInsertSchema(laboratoryMembers, {
 	laboratoryId: z.number().int().positive(),
@@ -14,13 +14,16 @@ export const createLaboratoryMemberDto = laboratoryMemberInsertSchema.omit({
 	createdAt: true,
 });
 
-// Update DTO (all optional)
+// Update DTO (all optional, allows explicit null to clear values)
 export const updateLaboratoryMemberDto = createLaboratoryMemberDto.partial();
 
-// Read DTO (includes id and createdAt)
-export const laboratoryMemberReadDto = createLaboratoryMemberDto.extend({
+// Read DTO (required fields but nullable where applicable to match actual API response structure)
+export const laboratoryMemberReadDto = z.object({
 	id: z.number().int(),
-	createdAt: z.string().datetime(), // ISO string for API contract
+	laboratoryId: z.number().int(),
+	userId: z.number().int(),
+	role: z.string(),
+	createdAt: z.string().datetime(),
 });
 
 // types

@@ -1,14 +1,22 @@
 import { createInsertSchema } from "drizzle-zod";
+import { experiments } from "src/infra/db/schema";
 import { z } from "zod";
-import { experiments } from "../../../infra/db/schema";
 
 const experimentInsertSchema = createInsertSchema(experiments, {
 	name: z.string().min(2, "Name is required").max(255, "Name is too long"),
-	description: z.string().max(1000, "Description is too long").optional(),
-	startDate: z.string().date().optional(),
-	endDate: z.string().date().optional(),
-	laboratoryId: z.number().int().positive().optional(),
-});
+	description: z.string().max(1000, "Description is too long").nullable().optional(),
+	startDate: z.string().date().nullable().optional(),
+	endDate: z.string().date().nullable().optional(),
+	laboratoryId: z.number().int().positive().nullable().optional(),
+}).refine(
+	(data) => {
+		if (data.startDate && data.endDate) {
+			return new Date(data.endDate) >= new Date(data.startDate);
+		}
+		return true;
+	},
+	{ message: "End date must be greater than or equal to start date", path: ["endDate"] }
+);
 
 // Create DTO (omit auto-generated fields)
 export const createExperimentDto = experimentInsertSchema.omit({
@@ -16,13 +24,26 @@ export const createExperimentDto = experimentInsertSchema.omit({
 	createdAt: true,
 });
 
-// Update DTO (all optional)
-export const updateExperimentDto = createExperimentDto.partial();
+// Update DTO (all optional, allows explicit null to clear values)
+export const updateExperimentDto = createExperimentDto.partial().refine(
+	(data) => {
+		if (data.startDate && data.endDate) {
+			return new Date(data.endDate) >= new Date(data.startDate);
+		}
+		return true;
+	},
+	{ message: "End date must be greater than or equal to start date", path: ["endDate"] }
+);
 
-// Read DTO (includes id and createdAt)
-export const experimentReadDto = createExperimentDto.extend({
+// Read DTO (required fields but nullable where applicable to match actual API response structure)
+export const experimentReadDto = z.object({
 	id: z.number().int(),
-	createdAt: z.string().datetime(), // ISO string for API contract
+	name: z.string(),
+	description: z.string().nullable(),
+	startDate: z.string().date().nullable(),
+	endDate: z.string().date().nullable(),
+	laboratoryId: z.number().int().nullable(),
+	createdAt: z.string().datetime(),
 });
 
 // Types

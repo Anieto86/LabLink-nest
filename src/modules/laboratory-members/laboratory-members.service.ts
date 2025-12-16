@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import type {
 	CreateLaboratoryMemberDto,
 	UpdateLaboratoryMemberDto,
@@ -13,8 +13,25 @@ export class LaboratoryMembersService {
 	) {}
 
 	async create(createLaboratoryMemberDto: CreateLaboratoryMemberDto) {
-		const newMember = await this.laboratoryMembersRepo.create(createLaboratoryMemberDto);
-		return toLaboratoryMemberRead(newMember);
+		try {
+			const newMember = await this.laboratoryMembersRepo.create(createLaboratoryMemberDto);
+			return toLaboratoryMemberRead(newMember);
+		} catch (error: unknown) {
+			// Postgres unique constraint violation (code 23505)
+			if (
+				typeof error === "object" &&
+				error !== null &&
+				"code" in error &&
+				error.code === "23505" &&
+				"constraint" in error &&
+				error.constraint === "laboratory_members_unique"
+			) {
+				throw new ConflictException(
+					`User ${createLaboratoryMemberDto.userId} is already a member of laboratory ${createLaboratoryMemberDto.laboratoryId}`
+				);
+			}
+			throw error;
+		}
 	}
 
 	async findAll() {
