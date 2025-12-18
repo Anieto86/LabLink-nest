@@ -2,15 +2,15 @@ import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { laboratories } from "../../../infra/db/schema";
 
-// Base schema from Drizzle with validations
-const laboratoryInsertSchema = createInsertSchema(laboratories, {
-	name: z.string().min(1, "Name is required").max(255),
-	location: z.string().max(500).optional(),
-	capacity: z.number().int().positive().optional(),
+// Base schema from Drizzle with column-aware validations
+const laboratoryBaseDto = createInsertSchema(laboratories, {
+	name: (schema) => schema.min(1, "Name is required").max(255),
+	location: (schema) => schema.max(500).optional(),
+	capacity: (schema) => schema.int().positive().optional(),
 });
 
-// Create DTO (omit auto-generated fields)
-export const createLaboratoryDto = laboratoryInsertSchema.omit({
+// Create DTO (omit server-managed fields)
+export const createLaboratoryDto = laboratoryBaseDto.omit({
 	id: true,
 	createdAt: true,
 });
@@ -18,10 +18,13 @@ export const createLaboratoryDto = laboratoryInsertSchema.omit({
 // Update DTO (all optional)
 export const updateLaboratoryDto = createLaboratoryDto.partial();
 
-// Read DTO (includes id and createdAt)
-export const laboratoryReadDto = createLaboratoryDto.extend({
+// Read DTO (explicit API shape)
+export const laboratoryReadDto = z.object({
 	id: z.number().int(),
-	createdAt: z.string().datetime(), // ISO string for API contract
+	name: z.string(),
+	location: z.string().optional().nullable(),
+	capacity: z.number().int().optional().nullable(),
+	createdAt: z.string().datetime(),
 });
 
 export type UpdateLaboratoryDto = z.infer<typeof updateLaboratoryDto>;

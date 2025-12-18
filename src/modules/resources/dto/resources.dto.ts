@@ -2,33 +2,33 @@ import { createInsertSchema } from "drizzle-zod";
 import { resources } from "src/infra/db/schema";
 import { z } from "zod";
 
-// Define allowed resource statuses
-const resourceStatusEnum = z.enum(["available", "in_use", "maintenance", "retired"]);
+const ALLOWED_RESOURCE_STATUSES = ["available", "in_use", "maintenance", "retired"] as const;
 
+// Base schema from Drizzle with column-aware validations
 const resourceInsertSchema = createInsertSchema(resources, {
-	laboratoryId: z.number().int().positive(),
-	type: z.string().min(2, "Type is required").max(100, "Type is too long"),
-	name: z.string().min(2, "Name is required").max(255, "Name is too long"),
-	status: resourceStatusEnum.default("available"),
-	metadata: z.unknown().nullable().optional(), // Allow any valid JSON structure
+	laboratoryId: (schema) => schema.int().positive(),
+	type: (schema) => schema.min(2, "Type is required").max(100, "Type is too long"),
+	name: (schema) => schema.min(2, "Name is required").max(255, "Name is too long"),
+	status: (schema) => schema.refine((v) => ALLOWED_RESOURCE_STATUSES.includes(v as any), "Invalid status"),
+	metadata: (schema) => schema.nullable().optional(), // Accept any JSON structure
 });
 
-// Create DTO (omit auto-generated fields)
+// Create DTO (omit server-managed fields)
 export const createResourceDto = resourceInsertSchema.omit({
 	id: true,
 	createdAt: true,
 });
 
-// Update DTO (all optional, allows explicit null to clear values)
+// Update DTO (all optional)
 export const updateResourceDto = createResourceDto.partial();
 
-// Read DTO (required fields but nullable where applicable to match actual API response structure)
+// Read DTO (explicit API shape)
 export const resourceReadDto = z.object({
 	id: z.number().int(),
 	laboratoryId: z.number().int(),
 	type: z.string(),
 	name: z.string(),
-	status: resourceStatusEnum,
+	status: z.enum(ALLOWED_RESOURCE_STATUSES),
 	metadata: z.unknown().nullable(),
 	createdAt: z.string().datetime(),
 });
