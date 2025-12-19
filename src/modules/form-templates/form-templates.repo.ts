@@ -7,10 +7,6 @@ import * as schema from "src/infra/db/schema";
 
 type NewFormTemplate = Omit<InferInsertModel<typeof schema.formTemplates>, "id" | "createdAt">;
 type UpdatableFormTemplate = Partial<NewFormTemplate>;
-type NewFormTemplateVersion = Omit<
-	InferInsertModel<typeof schema.formTemplateVersions>,
-	"id" | "modifiedAt"
->;
 
 @Injectable()
 export class FormTemplatesRepo {

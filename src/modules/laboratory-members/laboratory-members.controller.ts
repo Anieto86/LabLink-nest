@@ -1,26 +1,13 @@
-import {
-	Body,
-	Controller,
-	Delete,
-	Get,
-	Inject,
-	Param,
-	ParseIntPipe,
-	Patch,
-	Post,
-} from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
 import type {
 	CreateLaboratoryMemberDto,
 	UpdateLaboratoryMemberDto,
 } from "./dto/laboratory-members.dto";
-import { LaboratoryMembersService } from "./laboratory-members.service";
+import type { LaboratoryMembersService } from "./laboratory-members.service";
 
 @Controller("laboratory-members")
 export class LaboratoryMembersController {
-	constructor(
-		@Inject(LaboratoryMembersService)
-		private readonly laboratoryMembersService: LaboratoryMembersService
-	) {}
+	constructor(private readonly laboratoryMembersService: LaboratoryMembersService) {}
 
 	@Post()
 	create(@Body() createLaboratoryMemberDto: CreateLaboratoryMemberDto) {

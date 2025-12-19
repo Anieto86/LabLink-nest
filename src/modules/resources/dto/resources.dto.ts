@@ -9,7 +9,11 @@ const resourceInsertSchema = createInsertSchema(resources, {
 	laboratoryId: (schema) => schema.int().positive(),
 	type: (schema) => schema.min(2, "Type is required").max(100, "Type is too long"),
 	name: (schema) => schema.min(2, "Name is required").max(255, "Name is too long"),
-	status: (schema) => schema.refine((v) => ALLOWED_RESOURCE_STATUSES.includes(v as any), "Invalid status"),
+	status: (schema) =>
+		schema.refine(
+			(v) => ALLOWED_RESOURCE_STATUSES.includes(v as (typeof ALLOWED_RESOURCE_STATUSES)[number]),
+			"Invalid status"
+		),
 	metadata: (schema) => schema.nullable().optional(), // Accept any JSON structure
 });
 
