@@ -59,7 +59,7 @@ export const equipment = pgTable(
 		type: text(),
 		// You can use { mode: "bigint" } if numbers are exceeding js number limitations
 		laboratoryId: bigint("laboratory_id", { mode: "number" }).notNull(),
-	status: equipmentStatus().default("available").notNull(),
+		status: equipmentStatus().default("available").notNull(),
 		createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
 			.defaultNow()
 			.notNull(),
@@ -472,6 +472,48 @@ export const resources = pgTable(
 			columns: [table.laboratoryId],
 			foreignColumns: [laboratories.id],
 			name: "resources_laboratory_id_fkey",
+		}).onDelete("cascade"),
+	]
+);
+
+// Storage: inventory items per laboratory (consumables, reagents, etc.)
+export const storage = pgTable(
+	"storage",
+	{
+		// You can use { mode: "bigint" } if numbers are exceeding js number limitations
+		id: bigint({ mode: "number" }).primaryKey().generatedAlwaysAsIdentity({
+			name: "storage_id_seq",
+			startWith: 1,
+			increment: 1,
+			minValue: 1,
+			cache: 1,
+		}),
+		name: text().notNull(),
+		type: text().notNull(),
+		quantity: integer().notNull(),
+		unit: text().notNull(),
+		location: text(),
+		expirationDate: date("expiration_date"),
+		// You can use { mode: "bigint" } if numbers are exceeding js number limitations
+		laboratoryId: bigint("laboratory_id", { mode: "number" }).notNull(),
+		createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+			.defaultNow()
+			.notNull(),
+	},
+	(table) => [
+		index("storage_laboratory_id_idx").using(
+			"btree",
+			table.laboratoryId.asc().nullsLast().op("int8_ops")
+		),
+		index("storage_type_idx").using("btree", table.type.asc().nullsLast().op("text_ops")),
+		index("storage_expiration_date_idx").using(
+			"btree",
+			table.expirationDate.asc().nullsLast().op("date_ops")
+		),
+		foreignKey({
+			columns: [table.laboratoryId],
+			foreignColumns: [laboratories.id],
+			name: "storage_laboratory_id_fkey",
 		}).onDelete("cascade"),
 	]
 );

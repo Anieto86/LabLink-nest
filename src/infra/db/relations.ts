@@ -4,14 +4,15 @@ import {
 	equipment,
 	experimentRecordFiles,
 	experimentRecords,
-	experimentStatusHistory,
 	experiments,
+	experimentStatusHistory,
 	formTemplates,
 	formTemplateVersions,
 	laboratories,
 	laboratoryMembers,
 	reservations,
 	resources,
+	storage,
 	users,
 } from "./schema";
 
@@ -27,6 +28,7 @@ export const laboratoriesRelations = relations(laboratories, ({ many }) => ({
 	experiments: many(experiments),
 	laboratoryMembers: many(laboratoryMembers),
 	resources: many(resources),
+	storage: many(storage),
 }));
 
 export const experimentsRelations = relations(experiments, ({ one, many }) => ({
@@ -121,6 +123,13 @@ export const resourcesRelations = relations(resources, ({ one, many }) => ({
 		references: [laboratories.id],
 	}),
 	reservations: many(reservations),
+}));
+
+export const storageRelations = relations(storage, ({ one }) => ({
+	laboratory: one(laboratories, {
+		fields: [storage.laboratoryId],
+		references: [laboratories.id],
+	}),
 }));
 
 export const reservationsRelations = relations(reservations, ({ one }) => ({

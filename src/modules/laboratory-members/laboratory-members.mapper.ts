@@ -1,6 +1,6 @@
 import type { InferSelectModel } from "drizzle-orm";
 import type { laboratoryMembers } from "src/infra/db/schema";
-import type { LaboratoryMemberRead } from "src/modules/laboratory-members/entities/laboratory-member.entity";
+import type { LaboratoryMemberRead } from "./entities/laboratory-member.entity";
 
 type LaboratoryMemberRow = InferSelectModel<typeof laboratoryMembers>;
 

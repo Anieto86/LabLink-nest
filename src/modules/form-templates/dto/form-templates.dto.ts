@@ -4,10 +4,10 @@ import { z } from "zod";
 
 // Base insert schema derived from Drizzle with overrides
 const formTemplateBaseDto = createInsertSchema(formTemplates, {
-  name: z.string().min(1, "Name is required").max(255),
-  description: z.string().max(2000).nullable().optional(),
-  structure: z.unknown(),
-  createdBy: z.number().int().positive().optional(),
+  name: (schema) => schema.min(1, "Name is required").max(255),
+  description: (schema) => schema.max(2000).nullable().optional(),
+  structure: (schema) => schema, // Accept any JSON structure
+  createdBy: (schema) => schema.int().positive().optional(),
 });
 
 // Create DTO: exclude server-managed fields

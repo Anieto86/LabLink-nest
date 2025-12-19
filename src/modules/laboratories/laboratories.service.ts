@@ -1,11 +1,11 @@
-import { Inject, Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import type { CreateLaboratoryDto, UpdateLaboratoryDto } from "./dto/laboratory.dto";
 import { toLaboratoryRead } from "./laboratories.mapper";
-import { LaboratoryRepo } from "./laboratories.repo";
+import type { LaboratoryRepo } from "./laboratories.repo";
 
 @Injectable()
 export class LaboratoriesService {
-	constructor(@Inject(LaboratoryRepo) private readonly laboratoriesRepo: LaboratoryRepo) {}
+	constructor(private readonly laboratoriesRepo: LaboratoryRepo) {}
 
 	async create(createLaboratoryDto: CreateLaboratoryDto) {
 		const newLaboratory = await this.laboratoriesRepo.create(createLaboratoryDto);

@@ -2,15 +2,15 @@
  * UserService: Main service for user-related business logic.
  * Provides simple methods to retrieve user info by ID or email.
  */
-import { ConflictException, Inject, Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { hashPassword } from "../../infra/security/hash";
 import type { UserCreate, UserUpdate } from "./dto/users.dto";
 import { toUserRead } from "./user.mapper";
-import { UserRepo } from "./user.repo";
+import type { UserRepo } from "./user.repo";
 
 @Injectable()
 export class UserService {
-	constructor(@Inject(UserRepo) private readonly userRepo: UserRepo) {}
+	constructor(private readonly userRepo: UserRepo) {}
 
 	async getUserInfo(userId: number) {
 		const user = await this.userRepo.findById(userId);
