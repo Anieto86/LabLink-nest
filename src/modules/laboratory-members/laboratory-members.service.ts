@@ -1,14 +1,16 @@
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import type {
 	CreateLaboratoryMemberDto,
 	UpdateLaboratoryMemberDto,
 } from "./dto/laboratory-members.dto";
 import { toLaboratoryMemberRead } from "./laboratory-members.mapper";
-import type { LaboratoryMembersRepo } from "./laboratory-members.repo";
+import { LaboratoryMembersRepo } from "./laboratory-members.repo";
 
 @Injectable()
 export class LaboratoryMembersService {
-	constructor(private readonly laboratoryMembersRepo: LaboratoryMembersRepo) {}
+	constructor(
+		@Inject(LaboratoryMembersRepo) private readonly laboratoryMembersRepo: LaboratoryMembersRepo
+	) {}
 
 	async create(createLaboratoryMemberDto: CreateLaboratoryMemberDto) {
 		try {

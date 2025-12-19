@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import type { CreateEquipmentDto, UpdateEquipmentDto } from "./dto/equipment.dto";
 import { toEquipmentReadDto } from "./equipment.mapper";
-import type { EquipmentRepo } from "./equipment.repo";
+import { EquipmentRepo } from "./equipment.repo";
 
 @Injectable()
 export class EquipmentService {
-	constructor(private readonly equipmentRepo: EquipmentRepo) {}
+	constructor(@Inject(EquipmentRepo) private readonly equipmentRepo: EquipmentRepo) {}
 
 	async getAllEquipment() {
 		const equipments = await this.equipmentRepo.findAll();

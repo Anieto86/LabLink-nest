@@ -1,11 +1,11 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import type { CreateResourceDto, UpdateResourceDto } from "./dto/resources.dto";
 import { toResourceRead } from "./resources.mapper";
-import type { ResourcesRepo } from "./resources.repo";
+import { ResourcesRepo } from "./resources.repo";
 
 @Injectable()
 export class ResourcesService {
-	constructor(private readonly resourcesRepo: ResourcesRepo) {}
+	constructor(@Inject(ResourcesRepo) private readonly resourcesRepo: ResourcesRepo) {}
 
 	async create(createResourceDto: CreateResourceDto) {
 		try {

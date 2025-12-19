@@ -3,7 +3,8 @@ import type {
 	CreateLaboratoryMemberDto,
 	UpdateLaboratoryMemberDto,
 } from "./dto/laboratory-members.dto";
-import type { LaboratoryMembersService } from "./laboratory-members.service";
+//biome-ignore-next-line eslint/no-unused-vars
+import { LaboratoryMembersService } from "./laboratory-members.service";
 
 @Controller("laboratory-members")
 export class LaboratoryMembersController {

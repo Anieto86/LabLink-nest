@@ -1,11 +1,11 @@
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import type { CreateFormTemplateDto, UpdateFormTemplateDto } from "./dto/form-templates.dto";
 import { toFormTemplateRead } from "./form-templates.mapper";
-import type { FormTemplatesRepo } from "./form-templates.repo";
+import { FormTemplatesRepo } from "./form-templates.repo";
 
 @Injectable()
 export class FormTemplatesService {
-	constructor(private readonly formTemplatesRepo: FormTemplatesRepo) {}
+	constructor(@Inject(FormTemplatesRepo) private readonly formTemplatesRepo: FormTemplatesRepo) {}
 
 	//create
 

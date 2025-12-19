@@ -7,6 +7,7 @@ import { EquipmentModule } from "./modules/equipment/equipment.module";
 import { ExperimentsModule } from "./modules/experiments/experiments.module";
 import { LaboratoriesModule } from "./modules/laboratories/laboratories.module";
 import { LaboratoryMembersModule } from "./modules/laboratory-members/laboratory-members.module";
+import { ReservationsModule } from "./modules/reservations/reservations.module";
 import { ResourcesModule } from "./modules/resources/resources.module";
 import { UserModule } from "./modules/user/user.module";
 
@@ -21,6 +22,7 @@ import { UserModule } from "./modules/user/user.module";
 		LaboratoriesModule,
 		LaboratoryMembersModule,
 		ExperimentsModule,
+		ReservationsModule,
 		ResourcesModule,
 	],
 	controllers: [],
